@@ -90,6 +90,41 @@ var workorder = require("../modals/Workorder");
     }
   });
 
+  router.post("/notification/vendor", async (req, res) => {
+    try {
+  
+      const { workorder_id, vendor_name, staffmember_name, rental_adress } = req.body.workorder;
+
+      const vendorNotification = {
+        workorder_id: `${workorder_id}`,
+        notification_title: 'Vendor Update Workorder',
+        notification_details: `Vendor added parts and labour to the Work Order for ${req.body.workorder.rental_adress} to handle ${req.body.workorder.work_subject}`,
+        isread: false,
+        istenant: true,
+        // vendor_name: `${vendor_name}`,
+        // staffmember_name:`${staffmember_name}`,
+        rental_adress: `${rental_adress}`,
+        notification_time: new Date().toISOString(),
+      };
+
+      await Notification.create({
+        ...vendorNotification,
+        // index: newIndex,
+      });
+  
+      res.json({
+        statusCode: 200,
+        data: vendorNotification,
+        message: "Notification Added Successfully",
+      });
+    } catch (error) {
+      res.json({
+        statusCode: 500,
+        message: error.message,
+      });
+    }
+  });
+
 //get
 router.get("/notification", async (req, res) => {
   try {

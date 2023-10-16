@@ -413,4 +413,29 @@ router.post("/search_Properties", async (req, res) => {
 });
 
 
+router.get("/rentals_property/:rental_adress", async (req, res) => {
+  try {
+    const adress = req.params.rental_adress; 
+    var data = await Rentals.findOne({ rental_adress: adress }); 
+    if (data) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Rental property details retrieved successfully",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Rental property details not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
+
 module.exports = router;

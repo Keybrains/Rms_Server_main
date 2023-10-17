@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const tenantsSchema = new Schema({
-  tenant_id:{type: String},
+const entrySchema = new Schema({
+  
   rental_adress: { type: String },
   lease_type: { type: String },
   start_date: { type: Date },
@@ -21,77 +21,81 @@ const tenantsSchema = new Schema({
 
   Due_date: { type: String },
   Security_amount: { type: Number },
- 
-//   Add tenants
 
-tenant_firstName: { type: String },
-tenant_lastName: { type: String },
-tenant_unitNumber:{ type: String },
-// tenant_phoneNumber: { type: Number },
-tenant_mobileNumber: { type: Number },
-tenant_workNumber: { type: Number },
-tenant_homeNumber: { type: Number },
-tenant_faxPhoneNumber: { type: Number },
-tenant_email: { type: String },
-tenant_password: { type: String },
-alternate_email: { type: String },
-tenant_residentStatus: { type: String },
+  // add cosigner
 
-// personal information
-birth_date: { type: Date },
-textpayer_id: { type: String },
-comments: { type: String },
+  cosigner_firstName: { type: String },
+  cosigner_lastName: { type: String },
+  cosigner_mobileNumber: { type: Number },
+  cosigner_workNumber: { type: Number },
+  cosigner_homeNumber: { type: Number },
+  cosigner_faxPhoneNumber: { type: Number },
+  cosigner_email: { type: String },
+  cosigner_alternateemail: { type: String },
+  cosigner_streetAdress: { type: String },
+  cosigner_city: { type: String },
+  cosigner_state: { type: String },
+  cosigner_zip: { type: String },
+  cosigner_country: { type: String },
+  cosigner_postalcode: { type: String },
 
-//Emergency contact
+  // add recuring charge
 
-contact_name: { type: String },
-relationship_tenants: { type: String },
-email: { type: String },
-emergency_PhoneNumber: { type: Number },
+  recuring_amount: { type: Number },
+  recuring_account:{ type: String },
+  recuringnextDue_date: { type: Date },
+  recuringmemo:{ type: String },
+  recuringfrequency:{ type: String },
 
-// add cosigner
+  //add one time charge 
 
-cosigner_firstName: { type: String },
-cosigner_lastName: { type: String },
-cosigner_mobileNumber: { type: Number },
-cosigner_workNumber: { type: Number },
-cosigner_homeNumber: { type: Number },
-cosigner_faxPhoneNumber: { type: Number },
-cosigner_email: { type: String },
-cosigner_alternateemail: { type: String },
-cosigner_streetAdress: { type: String },
-cosigner_city: { type: String },
-cosigner_state: { type: String },
-cosigner_zip: { type: String },
-cosigner_country: { type: String },
-cosigner_postalcode: { type: String },
+  onetime_amount: { type: Number },
+  onetime_account:{ type: String },
+  onetime_Due_date: { type: Date },
+  onetime_memo:{ type: String },
 
-// add recuring charge
+  // add account 
+  account_name:{ type: String },
+  account_type:{ type: String },
 
-recuring_amount: { type: Number },
-recuring_account:{ type: String },
-recuringnextDue_date: { type: Date },
-recuringmemo:{ type: String },
-recuringfrequency:{ type: String },
+  //account level (sub account)
+  parent_account:{ type: String },
+  account_number: { type: Number },
+  fund_type:{ type: String },
+  cash_flow:{ type: String },
+  notes:{ type: String },
 
-//add one time charge 
+});
 
-onetime_amount: { type: Number },
-onetime_account:{ type: String },
-onetime_Due_date: { type: Date },
-onetime_memo:{ type: String },
+const tenantsSchema = new Schema({
+  tenant_id:{type: String},
 
-// add account 
-account_name:{ type: String },
-account_type:{ type: String },
+  //   Add tenants
+  tenant_firstName: { type: String },
+  tenant_lastName: { type: String },
+  tenant_unitNumber:{ type: String },
+  // tenant_phoneNumber: { type: Number },
+  tenant_mobileNumber: { type: Number },
+  tenant_workNumber: { type: Number },
+  tenant_homeNumber: { type: Number },
+  tenant_faxPhoneNumber: { type: Number },
+  tenant_email: { type: String },
+  tenant_password: { type: String },
+  alternate_email: { type: String }, 
+  tenant_residentStatus: { type: String },
 
-//account level (sub account)
-parent_account:{ type: String },
-account_number: { type: Number },
-fund_type:{ type: String },
-cash_flow:{ type: String },
-notes:{ type: String },
+  // personal information
+  birth_date: { type: Date },
+  textpayer_id: { type: String },
+  comments: { type: String },
 
+  //Emergency contact
+
+  contact_name: { type: String },
+  relationship_tenants: { type: String },
+  email: { type: String },
+  emergency_PhoneNumber: { type: Number },
+  entries: [entrySchema], 
 });
 
 module.exports = mongoose.model("tenant", tenantsSchema);

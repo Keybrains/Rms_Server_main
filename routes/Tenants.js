@@ -11,115 +11,6 @@ var {
 var JWT = require("jsonwebtoken");
 var JWTD = require("jwt-decode");
 const nodemailer = require("nodemailer");
-//  var {verifyToken} = require("../authentication");
-
-
-
-    // // Create a transporter for sending emails
-    // var transporter = nodemailer.createTransport({
-    //   host: "smtp.hostinger.com",
-    //   port: 465,
-    //   auth: {
-    //     user: "shivamshukla@sparrowsofttech.com",
-    //     pass: "Shivam@4321",
-    //   },
-    // });
-
-    // // Define your mail options dynamically based on user input/
-    // var mailOptions = {
-    //   from: "shivamshukla@sparrowsofttech.com",
-    //   // to: req.body.email,
-    //   to: "shivam_shukla@sparrowsofttech.com",
-    //   subject: "Welcome Mail",
-    //   // text: "Message Done", // Use the message provided by the user
-    //   // text:
-    //   //   "Full Name: " +
-    //   //   req.body.firstName +
-    //   //   " " +
-    //   //   req.body.lastName +
-    //   //   "\n" +
-    //   //   "Mobile Number: " +
-    //   //   req.body.phone_number +
-    //   //   "\n" +
-    //   //   `Products:\n${productsText}`,
-    // };
-
-    // // Send the email using the transporter
-    // transporter.sendMail(mailOptions, function (error, info) {
-    //   if (error) {
-    //     console.log(error);
-    //     // Handle the error
-    //   } else {
-    //     console.log("Email sent: " + info.response);
-    //     // Handle the success
-    //   }
-    // });
-
-
-
-// router.post("/tenant", async (req, res) => {
-//     try {
-      
-//       var data = await Tenants.create(req.body);
-//       res.json({
-//         statusCode: 200,
-//         data: data,
-//         message: "Add  Successfully",
-//       });
-//     } catch (error) {
-//       res.json({
-//         statusCode: 500,
-//         message: error.message,
-//       });
-//     }
-//   });
-
-
-// working  mobileno validation  
-
-// router.post("/tenant", async (req, res) => {
-//   try {
-//     let findtenant_mobileNumber = await Tenants.findOne({
-//       tenant_mobileNumber: req.body.tenant_mobileNumber,
-//     });
-
-//     if (!findtenant_mobileNumber) {
-//       var count = await Tenants.count();
-//       function pad(num) {
-//         num = num.toString();
-//         while (num.length < 2) num = "0" + num;
-//         return num;
-//       }
-//       req.body["tenant_id"] = pad(count + 1);
-
-//       // Check if end_date matches the current date
-//       const currentDate = new Date();
-//       const endDate = new Date(req.body.end_date);
-
-//       if (endDate <= currentDate) {
-//         req.body["propertyOnRent"] = true;
-//       } else {
-//         req.body["propertyOnRent"] = false;
-//       }
-
-//       var data = await Tenants.create(req.body);
-
-//       // Get the tenant's rental address
-//       const tenantRentalAddress = req.body.rental_adress;
-
-//       // Find a rental with a matching rental address
-//       const matchingRental = await Rentals.findOne({
-//         rental_adress: tenantRentalAddress,
-//       });
-
-//       if (matchingRental) {
-//         // Update the matching rental's isrenton field to true
-//         await Rentals.findByIdAndUpdate(matchingRental._id, {
-//           isrenton: true,
-//         });
-//       }
-
-
 
 //add tenant
 router.post("/tenant", async (req, res) => {
@@ -132,6 +23,29 @@ router.post("/tenant", async (req, res) => {
     }
     req.body["tenant_id"] = pad(count + 1);
 
+    const {
+      tenant_id,
+      tenant_firstName,
+      tenant_lastName,
+      tenant_unitNumber,
+      tenant_mobileNumber,
+      tenant_workNumber,
+      tenant_homeNumber,
+      tenant_faxPhoneNumber,
+      tenant_email,
+      tenant_password,
+      alternate_email,
+      tenant_residentStatus,
+      birth_date,
+      textpayer_id,
+      comments,
+      contact_name,
+      relationship_tenants,
+      email,
+      emergency_PhoneNumber,
+      entries,
+    } = req.body;
+
     // Check if end_date matches the current date
     const currentDate = new Date();
     const endDate = new Date(req.body.end_date);
@@ -142,7 +56,35 @@ router.post("/tenant", async (req, res) => {
       req.body["propertyOnRent"] = false;
     }
 
-    var data = await Tenants.create(req.body);
+    const data = await Tenants.create({
+      tenant_id,
+      tenant_firstName,
+      tenant_lastName,
+      tenant_unitNumber,
+      tenant_mobileNumber,
+      tenant_workNumber,
+      tenant_homeNumber,
+      tenant_faxPhoneNumber,
+      tenant_email,
+      tenant_password,
+      alternate_email,
+      tenant_residentStatus,
+      birth_date,
+      textpayer_id,
+      comments,
+      contact_name,
+      relationship_tenants,
+      email,
+      emergency_PhoneNumber,
+      entries,
+    });
+
+    // Remove the _id fields from the entries
+    const responseData = { ...data.toObject() };
+    responseData. entries = responseData. entries.map((entryItem) => {
+      delete entryItem._id;
+      return entryItem;
+    });
 
     // Get the tenant's rental address
     const tenantRentalAddress = req.body.rental_adress;
@@ -171,8 +113,52 @@ router.post("/tenant", async (req, res) => {
     });
   }
 });
- 
 
+// router.post("/tenant", async (req, res) => {
+//   try {
+//     if (req.body.selectedTenantId) {
+//       // Update existing tenant
+//       const existingTenant = await Tenants.findOne({ _id: req.body.selectedTenantId });
+
+//       console.log(existingTenant, "existingTenant")
+
+//       if (existingTenant) {
+//         // Merge the leasing form data with the existing tenant's data
+//         const updatedTenantData = { ...existingTenant.toObject(), ...req.body };
+
+//         // Update the tenant
+//         const updatedTenant = await Tenants.findOneAndUpdate(
+//           { tenant_id: req.body.selectedTenantId },
+//           updatedTenantData,
+//           { new: true }
+//         );
+
+//         res.json({
+//           statusCode: 200,
+//           data: updatedTenant,
+//           message: "Update Tenant Data Successfully",
+//         });
+//       } else {
+//         // Handle the case where the selected tenant does not exist
+//         res.json({
+//           statusCode: 400,
+//           message: "Selected tenant not found.",
+//         });
+//       }
+//     } else {
+//       // Create a new tenant
+//       var count = await Tenants.count();
+//       // ... (rest of your existing code to create a new tenant)
+//     }
+//   } catch (error) {
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+ 
 //get tenant
   router.get("/tenant", async (req, res) => {
   try {

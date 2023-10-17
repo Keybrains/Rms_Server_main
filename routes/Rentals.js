@@ -200,9 +200,9 @@ router.get("/Rentals_summary/tenant/:rental_address", async (req, res) => {
 router.post("/filterproperty_type", async (req, res) => {
   try {
     let pipeline = [];
-    if (req.body.property_type) { // Corrected from req.body.rentals
+    if (req.body.rental_adress) { // Corrected from req.body.rentals
       pipeline.push({
-        $match: { property_type: req.body.property_type },
+        $match: { rental_adress: req.body.rental_adress },
       });
     }
     pipeline.push({

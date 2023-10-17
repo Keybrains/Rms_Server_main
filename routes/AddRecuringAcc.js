@@ -3,17 +3,45 @@ var router = express.Router();
 var AddRecuringAcc = require("../modals/AddRecuringAcc");
 
 //add account 
-router.post("/addaccount", async (req, res) => {
-    try {
+// router.post("/addaccount", async (req, res) => {
+//     try {
 
-      var data = await AddRecuringAcc.create(req.body);
+//       var data = await AddRecuringAcc.create(req.body);
+//       res.json({
+//         statusCode: 200,
+//         data: data,
+//         message: "Add  Successfully",
+//       });
+//     } catch (error) {
+//       res.json({
+//         statusCode: 500,
+//         message: error.message,
+//       });
+//     }
+//   });
+
+
+  router.post("/addRecuringAcc", async (req, res) => {
+    try {
+      // Check if an account with the same name already exists
+      const existingAccount = await AddRecuringAcc.findOne({ account_name: req.body.account_name });
+      
+      if (existingAccount) {
+        return res.status(400).json({
+          statusCode: 400,
+          message: "An account with the same name already exists.",
+        });
+      }
+  
+      // If no existing account with the same name, create a new one
+      const data = await AddRecuringAcc.create(req.body);
       res.json({
         statusCode: 200,
         data: data,
-        message: "Add  Successfully",
+        message: "Account added successfully",
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         statusCode: 500,
         message: error.message,
       });

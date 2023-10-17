@@ -201,4 +201,57 @@ router.post("/filterdate_range", async (req, res) => {
 });
 
 
+//search genral ledger table data 
+
+router.post("/ledger_tablesearch", async (req, res) => {
+  try {
+    let newArray = [];
+    newArray.push(
+      {
+        rental_adress: !isNaN(req.body.search)
+          ? req.body.search
+          : { $regex: req.body.search, $options: "i" },
+      },
+      {
+        account: !isNaN(req.body.search)
+          ? req.body.search
+          : { $regex: req.body.search, $options: "i" },
+      },
+      {
+        date_range: !isNaN(req.body.search)
+          ? req.body.search
+          : { $regex: req.body.search, $options: "i" },
+      },
+      {
+        date: !isNaN(req.body.search)
+          ? req.body.search
+          : { $regex: req.body.search, $options: "i" },
+      },
+      // {
+      //   property_type: !isNaN(req.body.search)
+      //     ? req.body.search
+      //     : { $regex: req.body.search, $options: "i" },
+      // },
+    );
+    var data = await Ledger.find({
+      $or: newArray,
+    });
+
+    // Calculate the count of the searched data
+    const dataCount = data.length;
+
+    res.json({
+      statusCode: 200,
+      data: data,
+      count: dataCount,  // Include the count in the response
+      message: "Read All ledger",
+    });
+  } catch (error) {
+    res.json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 module.exports = router;

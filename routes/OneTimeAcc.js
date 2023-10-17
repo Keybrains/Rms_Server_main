@@ -3,22 +3,49 @@ var router = express.Router();
 var OneTimeAcc = require("../modals/OneTimeAcc");
 
 //add account 
-router.post("/addaccount", async (req, res) => {
-    try {
+// router.post("/addaccount", async (req, res) => {
+//     try {
 
-      var data = await OneTimeAcc.create(req.body);
-      res.json({
-        statusCode: 200,
-        data: data,
-        message: "Add  Successfully",
-      });
-    } catch (error) {
-      res.json({
-        statusCode: 500,
-        message: error.message,
+//       var data = await OneTimeAcc.create(req.body);
+//       res.json({
+//         statusCode: 200,
+//         data: data,
+//         message: "Add  Successfully",
+//       });
+//     } catch (error) {
+//       res.json({
+//         statusCode: 500,
+//         message: error.message,
+//       });
+//     }
+//   });
+
+router.post("/addOneTimeAcc", async (req, res) => {
+  try {
+    // Check if an account with the same name already exists
+    const existingAccount = await OneTimeAcc.findOne({ account_name: req.body.account_name });
+    
+    if (existingAccount) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "An account with the same name already exists.",
       });
     }
-  });
+
+    // If no existing account with the same name, create a new one
+    const data = await OneTimeAcc.create(req.body);
+    res.json({
+      statusCode: 200,
+      data: data,
+      message: "Account added successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
 
 
   //get account

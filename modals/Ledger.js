@@ -9,7 +9,7 @@ const entrySchema = new Schema({
 });
 
 const ledgerSchema = new Schema({
-  date: { type: Date },
+  date: { type: String },
   rental_adress: { type: String },
   memo: { type: String },
   date_range: { type: String },

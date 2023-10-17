@@ -7,11 +7,11 @@ const rentalownernSchema = new Schema({
   rentalowner_firstName: { type: String },
   rentalOwner_lastName: { type: String },
   rentalOwner_companyName: { type: String },
-  birth_date: { type: Date },
+  birth_date: { type: String },
 
   //management agreement
-  start_date: { type: Date },
-  end_date: { type: Date },
+  start_date: { type: String },
+  end_date: { type: String },
 
   //Contact information
   rentalOwner_primaryEmail: { type: String },

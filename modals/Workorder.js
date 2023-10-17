@@ -29,7 +29,7 @@ vendor_note:{ type: String },
 staffmember_name:{ type: String },
 collaborators: { type: String },
 status: { type: String },
-due_date: { type: Date },
+due_date: { type: String },
 priority: { type: String },
 upload_file:{ type: String },
 

@@ -11,7 +11,7 @@ const tenantsSchema = new Schema({
   rent_cycle:{ type: String },
   amount: { type: Number },
   account:{ type: String },
-  nextDue_date: { type: Date },
+  nextDue_date: { type: String },
   memo:{ type: String },
   upload_file:[{ type: Array }],
   isrenton:{type:Boolean ,default: false},
@@ -19,7 +19,7 @@ const tenantsSchema = new Schema({
   
   //security deposite
 
-  Due_date: { type: Date },
+  Due_date: { type: String },
   Security_amount: { type: Number },
  
 //   Add tenants

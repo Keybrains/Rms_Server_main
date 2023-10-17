@@ -201,57 +201,57 @@ router.post("/filterdate_range", async (req, res) => {
 });
 
 
-//search genral ledger table data 
-
-router.post("/ledger_tablesearch", async (req, res) => {
+router.post("/filterproperty_type", async (req, res) => {
   try {
-    let newArray = [];
-    newArray.push(
-      {
-        rental_adress: !isNaN(req.body.search)
-          ? req.body.search
-          : { $regex: req.body.search, $options: "i" },
+    let pipeline = [];
+
+    // Filter by rental_adress if provided
+    if (req.body.rental_adress) {
+      pipeline.push({
+        $match: { rental_adress: req.body.rental_adress },
+      });
+    }
+
+    // Filter by account if provided
+    if (req.body.account) {
+      pipeline.push({
+        $match: { "entries.account": req.body.account },
+      });
+    }
+
+    pipeline.push({
+      $facet: {
+        data: [{ $skip: 0 }, { $limit: 10 }], // Adjust skip and limit as needed
+        totalCount: [{ $count: "count" }],
       },
-      {
-        account: !isNaN(req.body.search)
-          ? req.body.search
-          : { $regex: req.body.search, $options: "i" },
-      },
-      {
-        date_range: !isNaN(req.body.search)
-          ? req.body.search
-          : { $regex: req.body.search, $options: "i" },
-      },
-      {
-        date: !isNaN(req.body.search)
-          ? req.body.search
-          : { $regex: req.body.search, $options: "i" },
-      },
-      // {
-      //   property_type: !isNaN(req.body.search)
-      //     ? req.body.search
-      //     : { $regex: req.body.search, $options: "i" },
-      // },
-    );
-    var data = await Ledger.find({
-      $or: newArray,
     });
 
-    // Calculate the count of the searched data
-    const dataCount = data.length;
+    let result = await Ledger.aggregate(pipeline);
+
+    const responseData = {
+      data: result[0].data,
+      totalCount:
+        result[0].totalCount.length > 0 ? result[0].totalCount[0].count : 0,
+    };
 
     res.json({
       statusCode: 200,
-      data: data,
-      count: dataCount,  // Include the count in the response
-      message: "Read All ledger",
+      data: responseData.data,
+      totalCount: responseData.totalCount,
+      message: "Filtered data retrieved successfully",
     });
   } catch (error) {
-    res.json({
+    console.log(error);
+    res.status(500).json({
       statusCode: 500,
       message: error.message,
     });
   }
 });
+
+
+
+
+
 
 module.exports = router;

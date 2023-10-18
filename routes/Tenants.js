@@ -552,5 +552,32 @@ router.get("/property", async (req, res) => {
   }
 });
 
+// rental address wise get all data 
+router.get("/renton_property/:rental_adress", async (req, res) => {
+  try {
+    const rentalAdress = req.params.rental_adress;
+    console.log("Rental Address:", rentalAdress);
+    const data = await Tenants.find({ "entries.rental_adress": rentalAdress });
+    console.log("Rental data:", data);
+    if (data) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Property summary retrieved successfully",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Property summary not found for the specified rental address.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 module.exports = router;

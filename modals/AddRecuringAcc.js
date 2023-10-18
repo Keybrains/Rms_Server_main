@@ -16,4 +16,4 @@ notes:{ type: String },
 
 });
 
-module.exports = mongoose.model("ricuring_Acc", accountSchema);
+module.exports = mongoose.model("recuring_Acc", accountSchema);

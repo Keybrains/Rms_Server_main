@@ -6,7 +6,7 @@ const UploadFile = require("../modals/UploadFile"); // Import the upload model
 
 // Define a route for file uploads
 router.post("/upload", (req, res) => {
-    UploadFile.uploadFile(req, res);
+   res.status(200) // UploadFile.uploadFile(req, res);
 });
 
 module.exports = router;

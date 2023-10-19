@@ -4,14 +4,78 @@ var Rentals = require("../modals/Rentals");
 var Tenants = require("../modals/Tenants");
 // var {verifyToken} = require("../authentication");
 
-// Post
+// Post api working
+// router.post("/rentals", async (req, res) => {
+//   try {
+    
+//     var data = await Rentals.create(req.body);
+//     res.json({
+//       statusCode: 200,
+//       data: data,
+//       message: "Add Rentals Successfully",
+//     });
+//   } catch (error) {
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+
+//updated for exixting rental owener and store in array 
 router.post("/rentals", async (req, res) => {
   try {
-    
-    var data = await Rentals.create(req.body);
+    // Generate a unique rental_id
+    var count = await Rentals.countDocuments();
+    function pad(num) {
+      num = num.toString();
+      while (num.length < 2) num = "0" + num;
+      return num;
+    }
+    req.body["rental_id"] = pad(count + 1);
+
+    const {
+      rentalOwner_firstName,
+      rentalOwner_lastName,
+      rentalOwner_primaryEmail,
+      rentalOwner_companyName,
+      rentalOwner_homeNumber,
+      rentalOwner_phoneNumber,
+      rentalOwner_businessNumber,
+      entries,
+    } = req.body;
+
+    // Check if some condition based on the data you receive
+    // For example, you can check property_type and set a field accordingly
+    // if (property_type === "Residential") {
+    //   // Perform specific actions for residential properties
+    // } else if (property_type === "Commercial") {
+    //   // Perform specific actions for commercial properties
+    // }
+
+    // Create the rental entry
+    const data = await Rentals.create({
+      rentalOwner_firstName,
+      rentalOwner_lastName,
+      rentalOwner_primaryEmail,
+      rentalOwner_companyName,
+      rentalOwner_homeNumber,
+      rentalOwner_phoneNumber,
+      rentalOwner_businessNumber,
+      entries,
+    });
+
+    // Remove the _id fields from the entries
+    const responseData = { ...data.toObject() };
+    responseData.entries = responseData.entries.map((entryItem) => {
+      delete entryItem._id;
+      return entryItem;
+    });
+
     res.json({
       statusCode: 200,
-      data: data,
+      data: responseData,
       message: "Add Rentals Successfully",
     });
   } catch (error) {
@@ -21,6 +85,9 @@ router.post("/rentals", async (req, res) => {
     });
   }
 });
+
+
+
 
 router.get("/rentals", async (req, res) => {
   try {

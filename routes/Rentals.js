@@ -54,6 +54,10 @@ router.post("/rentals", async (req, res) => {
     //   // Perform specific actions for commercial properties
     // }
 
+    entries.forEach((entry, index) => {
+      entry.entryIndex = (index + 1).toString().padStart(2, "0");
+    });
+
     // Create the rental entry
     const data = await Rentals.create({
       rentalOwner_firstName,
@@ -66,6 +70,8 @@ router.post("/rentals", async (req, res) => {
       entries,
     });
 
+    data.entries = entries;
+    
     // Remove the _id fields from the entries
     const responseData = { ...data.toObject() };
     responseData.entries = responseData.entries.map((entryItem) => {
@@ -151,6 +157,54 @@ router.delete("/rentals", async (req, res) => {
   }
 });
 
+
+// delete recored entry wise new updated 
+router.delete("/rental/:rentalId/entry/:entryIndex", async (req, res) => {
+  try {
+    const rentalId = req.params.rentalId;
+    const entryIndex = req.params.entryIndex; // Do not parse to int
+
+    const rentals = await Rentals.find();
+    const rental = rentals.find((t) => t._id.toString() === rentalId);
+
+    if (!rental || !rental.entries) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Rental not found or has no entries",
+      });
+      return;
+    }
+
+    const entryIndexToDelete = rental.entries.findIndex(
+      (e) => e.entryIndex === entryIndex
+    );
+
+    if (entryIndexToDelete === -1) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    // Remove the entry from the entries array
+    rental.entries.splice(entryIndexToDelete, 1);
+
+    // Save the updated tenant data
+    await rental.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Entry deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
  //edit rentals 
  router.put("/rentals/:id", async (req, res) => {
   try {
@@ -162,6 +216,50 @@ router.delete("/rentals", async (req, res) => {
     });
   } catch (err) {
     res.json({
+      statusCode: 500,
+      message: err.message,
+    });
+  }
+});
+
+
+//put api add new entry in existing rentalowner 
+
+router.put("/rental/:id", async (req, res) => {
+  try {
+    const rentalId = req.params.id;
+    const updateData = req.body;
+    const rentals = await Rentals.findById(rentalId);
+
+    if (!rentals) {
+      return res.status(404).json({ statusCode: 404, message: "Rental not found" });
+    }
+
+
+    if (updateData.entries && Array.isArray(updateData.entries)) {
+      // Find the last entry in the existing entries
+      const lastEntry = rentals.entries.length > 0 ? rentals.entries[rentals.entries.length - 1] : null;
+      let nextEntryIndex = lastEntry ? (parseInt(lastEntry.entryIndex) + 1).toString().padStart(2, "0") : "01";
+
+      // Loop through the entries and set entryIndex
+      updateData.entries.forEach((entry) => {
+        entry.entryIndex = nextEntryIndex;
+        nextEntryIndex = (parseInt(nextEntryIndex) + 1).toString().padStart(2, "0");
+      });
+
+      rentals.entries.push(...updateData.entries);
+    }
+
+    // Update the main rentals data and entries array
+    const result = await rentals.save();
+
+    res.json({
+      statusCode: 200,
+      data: result,
+      message: "Rental Data Updated Successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
       statusCode: 500,
       message: err.message,
     });

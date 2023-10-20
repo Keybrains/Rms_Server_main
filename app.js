@@ -52,7 +52,7 @@ app.use("/vendor",VendorRouter);
 app.use("/workorder",WorkorderRouter);
 app.use("/ledger",LedgerRouter);
 app.use("/notification",NotificationRouter);
-app.use("/uploadfile",UploadFile);
+// app.use("/uploadfile",UploadFile);
 app.use("/recurringAcc",AddRicuringAcc);
 app.use("/onetimecharge",OneTimeChargeAcc);
 // catch 404 and forward to error handler

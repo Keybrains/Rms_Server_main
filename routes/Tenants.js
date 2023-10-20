@@ -46,15 +46,18 @@ router.post("/tenant", async (req, res) => {
       entries,
     } = req.body;
 
-    // Check if end_date matches the current date
     const currentDate = new Date();
     const endDate = new Date(req.body.end_date);
 
     if (endDate <= currentDate) {
       req.body["propertyOnRent"] = true;
-    } else {  
+    } else {
       req.body["propertyOnRent"] = false;
     }
+
+    entries.forEach((entry, index) => {
+      entry.entryIndex = (index + 1).toString().padStart(2, "0");
+    });
 
     const data = await Tenants.create({
       tenant_id,
@@ -79,23 +82,15 @@ router.post("/tenant", async (req, res) => {
       entries,
     });
 
-    // Remove the _id fields from the entries
-    const responseData = { ...data.toObject() };
-    responseData. entries = responseData. entries.map((entryItem) => {
-      delete entryItem._id;
-      return entryItem;
-    });
+    data.entries = entries;
 
-    // Get the tenant's rental address
     const tenantRentalAddress = req.body.rental_adress;
 
-    // Find a rental with a matching rental address
     const matchingRental = await Rentals.findOne({
       rental_adress: tenantRentalAddress,
     });
 
     if (matchingRental) {
-      // Update the matching rental's isrenton field to true
       await Rentals.findByIdAndUpdate(matchingRental._id, {
         isrenton: true,
       });
@@ -198,25 +193,77 @@ router.delete("/tenant", async (req, res) => {
 
   
  //edit tenant
-// PUT request to update tenant data
+// PUT request to update tenant data old 
+// router.put("/tenant/:id", async (req, res) => {
+//   try {
+//     // Update the tenant data
+//     let result = await Tenants.findByIdAndUpdate(req.params.id, req.body);
+
+//     // Check if end_date matches the current date and update propertyOnRent
+//     const currentDate = new Date();
+//     const endDate = new Date(req.body.end_date);
+
+//     if (endDate <= currentDate) {
+//       await Tenants.findByIdAndUpdate(req.params.id, {
+//         propertyOnRent: true,
+//       });
+//     } else {
+//       await Tenants.findByIdAndUpdate(req.params.id, {
+//         propertyOnRent: false,
+//       });
+//     }
+
+//     res.json({
+//       statusCode: 200,
+//       data: result,
+//       message: "Tenant Data Updated Successfully",
+//     });
+//   } catch (err) {
+//     res.json({
+//       statusCode: 500,
+//       message: err.message,
+//     });
+//   }
+// });
+
+
+// put api new change new entry add wise 
+
 router.put("/tenant/:id", async (req, res) => {
   try {
-    // Update the tenant data
-    let result = await Tenants.findByIdAndUpdate(req.params.id, req.body);
+    const tenantId = req.params.id;
+    const updateData = req.body;
+    const tenant = await Tenants.findById(tenantId);
 
-    // Check if end_date matches the current date and update propertyOnRent
+    if (!tenant) {
+      return res.status(404).json({ statusCode: 404, message: "Tenant not found" });
+    }
+
     const currentDate = new Date();
-    const endDate = new Date(req.body.end_date);
+    const endDate = new Date(updateData.end_date);
 
     if (endDate <= currentDate) {
-      await Tenants.findByIdAndUpdate(req.params.id, {
-        propertyOnRent: true,
-      });
+      updateData.propertyOnRent = true;
     } else {
-      await Tenants.findByIdAndUpdate(req.params.id, {
-        propertyOnRent: false,
-      });
+      updateData.propertyOnRent = false;
     }
+
+    if (updateData.entries && Array.isArray(updateData.entries)) {
+      // Find the last entry in the existing entries
+      const lastEntry = tenant.entries.length > 0 ? tenant.entries[tenant.entries.length - 1] : null;
+      let nextEntryIndex = lastEntry ? (parseInt(lastEntry.entryIndex) + 1).toString().padStart(2, "0") : "01";
+
+      // Loop through the entries and set entryIndex
+      updateData.entries.forEach((entry) => {
+        entry.entryIndex = nextEntryIndex;
+        nextEntryIndex = (parseInt(nextEntryIndex) + 1).toString().padStart(2, "0");
+      });
+
+      tenant.entries.push(...updateData.entries);
+    }
+
+    // Update the main tenant data and entries array
+    const result = await tenant.save();
 
     res.json({
       statusCode: 200,
@@ -224,7 +271,7 @@ router.put("/tenant/:id", async (req, res) => {
       message: "Tenant Data Updated Successfully",
     });
   } catch (err) {
-    res.json({
+    res.status(500).json({
       statusCode: 500,
       message: err.message,
     });
@@ -579,5 +626,52 @@ router.get("/renton_property/:rental_adress", async (req, res) => {
   }
 });
 
+//entry wise delete 
+
+router.delete("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
+  try {
+    const tenantId = req.params.tenantId;
+    const entryIndex = req.params.entryIndex; // Do not parse to int
+
+    const tenants = await Tenants.find();
+    const tenant = tenants.find((t) => t._id.toString() === tenantId);
+
+    if (!tenant || !tenant.entries) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Tenant not found or has no entries",
+      });
+      return;
+    }
+
+    const entryIndexToDelete = tenant.entries.findIndex(
+      (e) => e.entryIndex === entryIndex
+    );
+
+    if (entryIndexToDelete === -1) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    // Remove the entry from the entries array
+    tenant.entries.splice(entryIndexToDelete, 1);
+
+    // Save the updated tenant data
+    await tenant.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Entry deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;

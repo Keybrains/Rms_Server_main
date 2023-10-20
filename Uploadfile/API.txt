@@ -1,0 +1,572 @@
+API = application programing interface
+json =JavaScript object notation
+
+show data, get data  using get method
+data store in database using post method
+update data using put/PATCH method
+delete data using delete method
+
+
+call the api using fetch method
+
+There are four different types of APIs commonly used in web services: public, partner, private and composite
+
+*install node
+*login in mongodb
+*create API in node 
+
+"http" = http is node pre-difined module("its use to provide request and response to the server ")
+folder name server in node js
+folder name my app in react js
+npm install express
+ Express.js as a backend framework.
+
+
+To start the backend server open your terminal and run the following command:
+npm run dev
+
+postman path = 
+
+
+
+postman path =
+http://localhost:5000/register/register
+
+path ma app.js file mathi register levanu te first register che path ma
+ app.use("/register", RegisterRouter);
+
+and path ma 2nd register che ae register.js file mathi levanu
+router.post("/register", async (req, res) => {
+
+
+npm install --save-dev ajv@^7 
+
+
+http://localhost:5000/
+
+https://spr-cms-babe93641764.herokuapp.com/
+
+
+
+
+
+
+material ui icons
+
+*******************************************************************************************************************************************************************************************************************
+terminal cleare karva comand = cls
+react no project run karva cmd  ma file ma jai ne = npm start
+node ma run mate = nodemon
+
+*****************************************************************************************************************************************************************************************
+
+vs code ma ek sathe code comment ma mukva select kari ne (ctrl+/)
+vs code ma code set karva (alt+shift+f)
+rfce vs code ma structure mate
+ctrl+t new postman
+ctrl+shift + i = mobil view
+shift + altr + doun
+
+
+https://cms-sparrow.herokuapp.com/party-apk-api/login
+{
+    "name":"Bhaveshbhai Mangukiya",
+    "passWord":"123"
+}
+
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_count
+
+{
+    "name":"Bhaveshbhai Mangukiya"
+}
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_profile
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_pending_compaint
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_review_compaint
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_compaint_details
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_machine_details
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_complete_compaint
+
+https://cms-sparrow.herokuapp.com/party-apk-api/amc_exp_data
+
+
+https://cms-sparrow.herokuapp.com/party-apk-api/party_machine_type_vice_details
+
+https://cms-sparrow.herokuapp.com/party-apk-api/find_complaint_machinetype_problems
+
+https://cms-sparrow.herokuapp.com/party-apk-api/partyside_complaint
+
+************************************************************************************************
+ "name":"PRAKASHBHAI MADHAV" 
+
+
+ipconfig
+**************************************************
+
+https://youtu.be/IH-05HwiPkA
+
+***************************************************************
+
+git init
+git add .
+git commit -m "Rms_client2"
+git branch -M main
+git push -u origin main
+
+
+
+git init
+git add .
+git commit -m "RMS Server"
+git branch -M main
+git push -u origin main
+
+******************************************************************************************************
+
+"remote: repository not found. fatal: repository 'https://github.com/keybrains/rms_server.git/' not found
+when show this  error mess that time first git repositry public "
+******************************************************************************************************
+when show this error mess that time 
+PS E:\Rms_client> git push -u origin main remote: Permission to Keybrains/Rms_Client.git denied to Avanivaghani. fatal: unable to access 'https://github.com/Keybrains/Rms_Client.git/': The requested URL returned error: 403 PS E:\Rms_client>
+
+git config user.name "new name"
+git config credential.username "new name"
+
+more information   : https://stackoverflow.com/questions/47465644/github-remote-permission-denied
+***********************************************************************************************************
+
+npm run build
+
+"homepage": "https://sparrowsofttech.in/dev/cms",
+
+ nodemon
+
+********************************************************************************************************
+admin@gmail.com
+Admin@123 
+**************************************************************************************
+25-07
+bug solve in add complain dropdoun and database store forment 
+asign emgeer name in review complaint 
+cms project bug slove
+
+26-7
+cms super admin in all complaint in add complaint in partname , part qty, part price show  as machine type and store data in database
+
+
+14-08-2023
+(party side )
+Need to change - should display text as No record when no any record on page.
+party APK pages - all machine, total complain, complete complain, pending bill, parts request =====now fix 
+
+when  add copmlain that time show only create at filed in party side admin side and eng side , when update this that time show update at filed ======now fix 
+
+15-08-2023
+(party side )
+ party APK - complete complain - solution field is display instead of duration.====now fix 
+
+*********************************************************************************************************not live new change ************15-08-2023
+pms task (admin side )
+
+report -> eng report -> pdf  in (total time and lunch time esuue )=====now fix 
+
+In following pages, check box is also checked when click on arrow button and after reclick, checkbox is also unchecked.===now fix
+
+- complain
+- machine
+Engineer
+- parts
+- bill
+- parts request
+- party
+- access table
+Need to change - check box is not checked or unchecked when click or reclick on arrow button and it only shows details.
+
+isparrow party and admin side  new bug slove  ===now fix([isparrow party side live again )
+
+party APK pages - all machine, total complain, complete complain, pending bill, parts request ====now fix(party side )
+
+
+
+12:00 - build isparrow party 
+12:05 - build isparrow admin
+
+*************************************************17-08-2023
+review complain  in success icon , edit icon removed 
+
+parts -> all parts -> search box now working 
+All Machine Problems - search box is now working.	
+ Parts and Access table - search box is not working.
+
+It does not display the record when search using machine type and parts name and also all records is not display when remove the text in the search box. same issue in access table page.(PMS TASK)=====now fix
+
+In all complain and pending complain page, update record is also display after add the complain.===now fix 
+
+(ENG SIDE )*******
+ATTENDENCE -> total time as total working time change ==== now fix 
+
+*************************18-08-2023********************
+Eng and party APK - company id is display instead of complain id=== now fix 
+
+#46: Complain - two time field name is display. (admin side -> complain )=== now fix 
+
+part request -> cancel button -> mess change (enter reason) (party side )=== now fix 
+
+isparrow party side -> all page in chnage complain id  
+
+admin side -> complain -> add complain  in dropdoun in other select isuue ==== now fix 
+
+eng side -> pending complain ->click on start complain  that time show loader and swal  === now fix
+
+admin side -> complain -> all complain -> add complain -> selected party name filed in search box working ===== now fix 
+
+
+
+*****************************************21-08-2023**************************
+diamond project  in add designation from design  and node js in how to create api post and get ... learn and create for designation 
+
+*******************************(22-08-2023)********************************(PMS TASK )
+In complain, problem dropdown is not display responsively after add many options and due to this engineer dropdown is also display out of the form.
+Need to change:
+dropdown should display responsively after add many options and also engineer's dropdown should not display out of the form.===================now fix 
+
+-> also this bug solve in isparrow (complaint - client -isparrow )
+->get , post , delete , api learn  in tutorial and viedos
+-> github in learn how to upload project code , create repositery 
+
+*********************************(23-08-2023)***********************************(PMS TASK )
+parts request is approve without the signature and also request is not approve after approved.
+
+Need to add signature field as required field and request should be approved after approve. Also screen should not display as blank when popup is display.============NOW FIX 
+
+->learn api get , post , put , delete , edit 
+
+-> ALSO ISPARROW IN FIX THIS BUG (CMS-ISPARROW / PARTY WEB)
+parts request is approve without the signature and also request is not approve after approved.
+Need to add signature field as required field and request should be approved after approve. Also screen should not display as blank when popup is display.============NOW FIX 
+
+**********NOTE :*************
+Isparrow -party     ===  is updated code (final )
+
+http://localhost:5000/
+
+https://spr-cms-babe93641764.herokuapp.com/
+
+https://spr-cms-babe93641764.herokuapp.com/
+
+https://ispr-cms-cca737ac9e54.herokuapp.com/
+
+
+https://ispr-cms-cca737ac9e54.herokuapp.com/
+
+https://spr-cms-babe93641764.herokuapp.com/
+
+***************************************************************************party *************
+https://spr-cms-babe93641764.herokuapp.com/
+http://localhost:5000/
+https://spr-cms-babe93641764.herokuapp.com/
+
+
+
+
+************************************04-09-2023
+cms -admin
+
+-> click on sparrow thta time always navigate dashbord 
+-> amc exp (amc to date to 5 days before show all fount red color and 5 days after show yellow )
+-> all complain in  show all data (complaint, pending , rewiew , running )
+-> panding complain in when start time to after two hours in not show end time that time show red fount 
+-> panding complain in when only show start time  that tien this complain status show runnig 
+
+
+127
+
+I get an error when running npm install. The error is:
+
+npm ERR! Cannot read property 'pickAlgorithm' of null
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!    npm-cache\_logs\2021-10-14T08_03_47_266Z-debug.log
+I did the following but the error stays:
+
+Deleted node-modules
+Deleted the given file
+Running npm cache clear --force
+
+
+****************************************************04-09-2023
+
+9 to 10  cms project bug solution explain tester 
+10 to 10 :30 bug solving in cms (amc to date )
+10:30 to 11: 15  new admin panale in set popup 
+11:15 to 1: 00 mlm project in work 
+1 to 2 breck 
+2 : 00  to rms project in sidebar in set dropdoun and desing
+
+**************************************************05-09--2023
+9 to 12 find new admin panel 
+12 to 1 setup new project 
+
+
+
+mailto:avanivaghani@keybrainstech.com
+7St*gbOT.mt!
+
+mailto:shivamshukla@keybrainstech.com
+4Y=&_kC+z!kH
+
+
+mailto:vaibhavgoti@keybrainstech.com
+N!1mbGOSd0Vn
+
+
+
+http://64.225.8.160:4000/newproparty/newproparty
+2 to 8 :21 new project in desing and create login registration and fetch api in login page   ect  
+
+
+
+git init
+
+listings table in fetch this api to get table records
+http://64.225.8.160:4000/rentals/listings
+
+  rental_bed: { type: String },
+  rental_bath: { type: String },
+  rental_unitsAdress: { type: String },
+  rental_soft: { type: String },
+
+
+ post api    http://64.225.8.160:4000/rentalowner/rentalowner 
+
+ get api        http://64.225.8.160:4000/rentalowner/rentalowner
+
+detete         http://64.225.8.160:4000/rentalowner/delete_rentalowner
+
+put (edit )   http://64.225.8.160:4000/rentalowner/rentalowner/:id
+
+
+  //   Add Rental owner
+  rentalowner_firstName: { type: String },
+  rentalOwner_lastName: { type: String },
+  rentalOwner_companyName: { type: String },
+  birth_date: { type: Date },
+
+  //management agreement
+  start_date: { type: Date },
+  end_date: { type: Date },
+
+  //Contact information
+  rentalOwner_primaryEmail: { type: String },
+  rentalOwner_alternateEmail: { type: String },
+  rentalOwner_phoneNumber: { type: Number },
+  rentalOwner_homeNumber: { type: Number },
+  rentalOwner_businessNumber: { type: Number },
+  rentalOwner_homeNumber: { type: Number },
+  rentalOwner_telephoneNumber: { type: Number },
+  rentalOwner_streetAdress: { type: String },
+  rentalOwner_city: { type: String },
+  rentalOwner_state: { type: String },
+  rentalOwner_zip: { type: String },
+  rentalOwner_country: { type: String },
+  rentalOwner_comments: { type: String },
+
+  //1099 -NEC tax filling information
+
+  text_identityType: { type: String },
+  textpayer_id: { type: String },
+
+});
+
+
+
+
+ post api    http://64.225.8.160:4000/applicant/applicant
+
+ get api        http://64.225.8.160:4000/applicant/applicant
+
+put (edit )   http://64.225.8.160:4000/applicant/rentalowner/:id
+
+    
+  //   Add  applicant
+  applicant_firstName: { type: String },
+  applicant_lastName: { type: String },
+  applicant_email: { type: String },
+  applicant_phoneNumber: { type: Number },
+  applicant_homeNumber: { type: Number },
+  applicant_businessNumber: { type: Number },
+  applicant_telephoneNumber: { type: Number },
+  applicant_property: { type: String },
+
+
+
+ post api    http://64.225.8.160:4000/tenant/tenant
+
+ get api        http://64.225.8.160:4000/tenant/tenant
+
+
+
+
+put (edit )   http://64.225.8.160:4000/tenant/tenant/:id
+
+
+
+import Cookies from "universal-cookie";
+
+  let cookies = new Cookies();
+
+  // Check Authe(token)
+  let chackAuth = async () => {
+    if (cookies.get("token")) {
+      let config = {
+        headers: {
+          token: cookies.get("token"),
+        },
+      };
+      // auth post method
+      let res = await axios.post(
+        "http://64.225.8.160:4000/register/auth",
+        { purpose: "validate access" },
+        config
+      );
+      if (res.data.statusCode !== 200) {
+        cookies.remove("token");
+        navigate("/index");
+      }
+    } else {
+      navigate("/index");
+    }
+  };
+
+  React.useEffect(() => {
+    chackAuth();
+  }, [cookies.get("token")]);
+
+
+tenant table in firstname and last name wise search 
+get api        http://64.225.8.160:4000/tenant/search_tenant
+
+Properties table in rental_adress,rentalOwner_firstName,rentalOwner_lastName,rentalOwner_companyName,property_type
+get api        http://64.225.8.160:4000/rentals/search_Properties
+
+
+rentroll table in 
+amount,property_type,lease_type
+http://64.225.8.160:4000/tenant/search-rentroll
+
+
+rentalowner tabel in  
+rentalowner_firstName,rentalOwner_lastName,rentalOwner_streetAdress
+http://64.225.8.160:4000/rentalowner/search_RentalOwners
+
+
+add agent 
+http://64.225.8.160:4000/addagent/addagent  
+ 
+get agent
+http://64.225.8.160:4000/addagent/addagent
+
+edit agent
+http://64.225.8.160:4000/addagent/agent/:id
+
+delete agent
+http://64.225.8.160:4000/addagent/delete_agent
+
+find agent name
+http://64.225.8.160:4000/addagent/find_agentname
+
+
+******************************************************26-09-23
+
+agent summry data show id wise
+http://localhost:4000/addagent/agent_summary/:id
+
+staff member  data show id wise
+http://localhost:4000/addstaffmember/staffmember_summary/:id
+
+http://localhost:4000/workorder/workorder
+
+--Update--
+
+ Maintenance field :
+We work on Work Order field we made one form and collection for storing work orders also we made Vendor field form and collection.
+Work Order can be added from both side Tenant and Admin. 
+
+Separate Dashboard:
+We made vendor dashboard and their login credentials are added when vendor is create. In Vendor dashboard there are 2 fields vendor profile and workorder details
+We made Staff dashboard and their login credentials are added when staff is create. In Staff dashboard there are 2 fields staff profile and workorder details.
+We made Agent dashboard and their login credentials are added when agent is create. In Agent dashboard there is a field  profile.
+
+
+{
+    "statusCode": 200,
+    "data": {
+        "tenant_id": "08",
+	"lease_type":"fixed",
+        "rental_adress": "20 W Grand Ave Ste A",
+        "isrenton": false,
+        "tenant_firstName": "yesha",
+        "tenant_lastName": "golkiya",
+        "tenant_mobileNumber": 9525969609,
+        "_id": "651564a2fc5deea523b02abd",
+        "__v": 0
+
+	[
+		"rental_adress":"106 property"
+		"lease_type":"not fixed",
+	]
+
+	
+	[
+		"rental_adress":"106 property"
+	]
+
+    },
+    "message": "Add  Successfully"
+}
+
+
+http://64.225.8.160:4000/vendor/vendor_summary/:id
+
+http://64.225.8.160:4000/workorder/workorder_summary/:id
+
+
+										
+
+
+entries:[{"account":2000,
+        	"description":  "repair"
+                 "debit": 10
+                 "credit":  300
+      		 },
+{"account":2000,
+        	"description":  "repair"
+                 "debit": 10
+                 "credit":  300
+      		 }
+]
+
+
+mailto:avanivaghani@keybrainstech.com
+7St*gbOT.mt!
+
+mailto:shivamshukla@keybrainstech.com
+4Y=&_kC+z!kH
+
+
+mailto:vaibhavgoti@keybrainstech.com
+N!1mbGOSd0Vn
+
+'mailto:kbtplseo@gmail.com aur password github wala
+
+keybrains
+TIM$vishHMS13
+
+mailto:avanivaghani@keybrainstech.com
+7St*gbOT.mt!

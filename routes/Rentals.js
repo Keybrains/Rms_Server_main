@@ -93,8 +93,6 @@ router.post("/rentals", async (req, res) => {
 });
 
 
-
-
 router.get("/rentals", async (req, res) => {
   try {
     var data = await Rentals.find();
@@ -111,6 +109,7 @@ router.get("/rentals", async (req, res) => {
     });
   }
 });
+
 
 router.delete("/rentals", async (req, res) => {
   try {
@@ -234,7 +233,6 @@ router.put("/rental/:id", async (req, res) => {
     if (!rentals) {
       return res.status(404).json({ statusCode: 404, message: "Rental not found" });
     }
-
 
     if (updateData.entries && Array.isArray(updateData.entries)) {
       // Find the last entry in the existing entries
@@ -602,6 +600,85 @@ router.get("/rentals_property/:rental_adress", async (req, res) => {
     });
   }
 });
+
+
+// Update specific fields in an existing rental owner  
+// Update specific fields in an existing entry within a rental owner
+// router.put("/rental/:id/entry/:entryId", async (req, res) => {
+//   try {
+//     const rentalId = req.params.id;
+//     const entryId = req.params.entryId;
+//     const updatedFields = req.body;
+
+//     const rentals = await Rentals.findById(rentalId);
+
+//     if (!rentals) {
+//       return res.status(404).json({ statusCode: 404, message: "Rental not found" });
+//     }
+
+//     const entryToUpdate = rentals.entries.id(entryId);
+
+//     if (!entryToUpdate) {
+//       return res.status(404).json({ statusCode: 404, message: "Entry not found" });
+//     }
+
+
+    
+
+//     // // Update the specified fields in the entry
+//     // for (const key in updatedFields) {
+//     //   entryToUpdate[key] = updatedFields[key];
+//     // }
+
+//     const result = await rentals.save();
+
+//     res.json({
+//       statusCode: 200,
+//       data: result,
+//       message: "Entry Updated Successfully",
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       statusCode: 500,
+//       message: err.message,
+//     });
+//   }
+// });
+
+
+
+router.put("/rental/:id/entry/:entryId", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const entryId = req.params.entryId;
+    const updatedRentalData = req.body; // The entire updated tenant object
+
+    // Find the tenant by ID
+    const rentals = await Rentals.findById(id);
+
+    if (!rentals) {
+      return res.status(404).json({ statusCode: 404, message: "Tenant not found" });
+    }
+
+    // Update the entire tenant object with the updated data
+    rentals.set(updatedRentalData);
+
+    // Save the updated tenant document
+    const result = await rentals.save();
+
+    res.json({
+      statusCode: 200,
+      data: result,
+      message: "Tenant Updated Successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      statusCode: 500,
+      message: err.message,
+    });
+  }
+});
+
 
 
 module.exports = router;

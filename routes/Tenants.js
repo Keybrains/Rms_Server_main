@@ -227,8 +227,7 @@ router.delete("/tenant", async (req, res) => {
 // });
 
 
-// put api new change new entry add wise 
-
+// put api new change new entry add existing tenant add new index id and add recored 
 router.put("/tenant/:id", async (req, res) => {
   try {
     const tenantId = req.params.id;
@@ -322,6 +321,8 @@ router.get("/tenant_summary/:id", async (req, res) => {
     });
   }
 });
+
+
 
 router.get("/tenant_summary/tenant/:tenant_email", async (req, res) => {
   try {
@@ -673,5 +674,41 @@ router.delete("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
     });
   }
 });
+
+
+//update recored specific put api 
+router.put("/tenant/:tenantId/entries/:entryId", async (req, res) => {
+  try {
+    const tenantId = req.params.tenantId;
+    const entryId = req.params.entryId;
+    const updatedTenantData = req.body; // The entire updated tenant object
+
+    // Find the tenant by ID
+    const tenant = await Tenants.findById(tenantId);
+
+    if (!tenant) {
+      return res.status(404).json({ statusCode: 404, message: "Tenant not found" });
+    }
+
+    // Update the entire tenant object with the updated data
+    tenant.set(updatedTenantData);
+
+    // Save the updated tenant document
+    const result = await tenant.save();
+
+    res.json({
+      statusCode: 200,
+      data: result,
+      message: "Tenant Updated Successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      statusCode: 500,
+      message: err.message,
+    });
+  }
+});
+
+
 
 module.exports = router;

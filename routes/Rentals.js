@@ -602,50 +602,7 @@ router.get("/rentals_property/:rental_adress", async (req, res) => {
 });
 
 
-// Update specific fields in an existing rental owner  
-// Update specific fields in an existing entry within a rental owner
-// router.put("/rental/:id/entry/:entryId", async (req, res) => {
-//   try {
-//     const rentalId = req.params.id;
-//     const entryId = req.params.entryId;
-//     const updatedFields = req.body;
-
-//     const rentals = await Rentals.findById(rentalId);
-
-//     if (!rentals) {
-//       return res.status(404).json({ statusCode: 404, message: "Rental not found" });
-//     }
-
-//     const entryToUpdate = rentals.entries.id(entryId);
-
-//     if (!entryToUpdate) {
-//       return res.status(404).json({ statusCode: 404, message: "Entry not found" });
-//     }
-
-
-    
-
-//     // // Update the specified fields in the entry
-//     // for (const key in updatedFields) {
-//     //   entryToUpdate[key] = updatedFields[key];
-//     // }
-
-//     const result = await rentals.save();
-
-//     res.json({
-//       statusCode: 200,
-//       data: result,
-//       message: "Entry Updated Successfully",
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       statusCode: 500,
-//       message: err.message,
-//     });
-//   }
-// });
-
-
+//working this code 
 
 router.put("/rental/:id/entry/:entryId", async (req, res) => {
   try {
@@ -678,5 +635,50 @@ router.put("/rental/:id/entry/:entryId", async (req, res) => {
     });
   }
 });
+
+
+// router.put("/rental/:id/entry/:entryIndex", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const entryIndex = req.params.entryIndex;
+//     const updatedEntryData = req.body; // The updated entry data
+
+//     // Find the tenant by ID
+//     const rental = await Rentals.findById(id);
+
+//     if (!rental) {
+//       return res.status(404).json({ statusCode: 404, message: "Tenant not found" });
+//     }
+
+//     // Find the index of the entry to be updated
+//     const entryIndexToUpdate = rental.entries.findIndex(
+//       (entry) => entry.entryIndex === parseInt(entryIndex)
+//     );
+
+//     if (entryIndexToUpdate === -1) {
+//       return res.status(404).json({
+//         statusCode: 404,
+//         message: "Entry not found",
+//       });
+//     }
+
+//     // Update the specific entry with the updated data
+//     rental.entries[entryIndexToUpdate] = updatedEntryData;
+
+//     // Save the updated tenant document
+//     const result = await rental.save();
+
+//     res.json({
+//       statusCode: 200,
+//       data: result,
+//       message: "Entry Updated Successfully",
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       statusCode: 500,
+//       message: err.message,
+//     });
+//   }
+// });
 
 module.exports = router;

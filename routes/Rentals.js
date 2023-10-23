@@ -679,6 +679,4 @@ router.put("/rental/:id/entry/:entryId", async (req, res) => {
   }
 });
 
-
-
 module.exports = router;

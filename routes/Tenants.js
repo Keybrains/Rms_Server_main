@@ -710,5 +710,55 @@ router.put("/tenant/:tenantId/entries/:entryId", async (req, res) => {
 });
 
 
+router.get("/tenant_summary/:tenantId/entry/:entryIndex", async (req, res) => {
+  try {
+    const tenantId = req.params.tenantId;
+    const entryIndex = req.params.entryIndex; // Do not parse to int
+
+    const tenants = await Tenants.find();
+    const tenant = tenants.find((t) => t._id.toString() === tenantId);
+
+    if (!tenant || !tenant.entries) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Tenant not found or has no entries",
+      });
+      return;
+    }
+    const entry = tenant.entries.find((e) => e.entryIndex === entryIndex);
+
+    if (!entry) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    // Include common fields of the tenant in the response
+    const tenantDataWithEntry = {
+      _id: tenant._id,
+      tenant_id: tenant.tenant_id,
+      tenant_firstName: tenant.tenant_firstName,
+      tenant_lastName: tenant.tenant_lastName,
+      tenant_mobileNumber: tenant.tenant_mobileNumber,
+      tenant_email: tenant.tenant_email,
+      tenant_password: tenant.tenant_password,
+      entries: entry,
+    };
+
+    res.json({
+      data: tenantDataWithEntry,
+      statusCode: 200,
+      message: "Read Tenant Entry",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 module.exports = router;

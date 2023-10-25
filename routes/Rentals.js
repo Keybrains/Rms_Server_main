@@ -433,23 +433,58 @@ router.post("/filterproperty/owners", async (req, res) => {
   }
 });
 
-//find rental_address(proparty in lease form) 
+// find rental_address(proparty in lease form) 
+// router.get("/property", async (req, res) => {
+//   try {
+//     var data = await Rentals.find({isrenton:false}).select("rental_adress")
+//     console.log("Retrieved data:", data);
+//     data.reverse();
+//     res.json({
+//       statusCode: 200,
+//       data: data,
+//       message: "read all property",
+//     });
+//   } catch (error) {
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// }); 
+
+
 router.get("/property", async (req, res) => {
   try {
-    var data = await Rentals.find({isrenton:false}).select("rental_adress")
-    data.reverse();
-    res.json({
-      statusCode: 200,
-      data: data,
-      message: "read all property",
-    });
+    const data = await Rentals.find({ "entries.isrenton": false }, "entries.rental_adress");
+    
+    if (data.length > 0) {
+      const rentalAddresses = data.map(entry => entry.entries[0].rental_adress);
+      res.json({
+        statusCode: 200,
+        data: rentalAddresses,
+        message: "Read all rental addresses",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "No rental addresses found",
+      });
+    }
   } catch (error) {
-    res.json({
+    res.status(500).json({
       statusCode: 500,
       message: error.message,
     });
   }
-}); 
+});
+
+
+
+
+
+      
+
+
 
 //find rental_address(proparty in lease form) 
 router.get("/property_onrent", async (req, res) => {
@@ -602,7 +637,7 @@ router.get("/rentals_property/:rental_adress", async (req, res) => {
 });
 
 
-//working this code 
+///working this code 
 
 router.put("/rental/:id/entry/:entryId", async (req, res) => {
   try {

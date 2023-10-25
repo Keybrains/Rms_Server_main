@@ -677,11 +677,32 @@ router.delete("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
 
 
 //update recored specific put api 
-router.put("/tenant/:tenantId/entries/:entryId", async (req, res) => {
+//update recored specific put api 
+router.put("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
   try {
     const tenantId = req.params.tenantId;
-    const entryId = req.params.entryId;
-    const updatedTenantData = req.body; // The entire updated tenant object
+    const entryIndex = req.params.entryIndex;
+    const updatedTenantData = req.body.entries[0];
+    const updatedData = {
+      tenant_firstName: req.body.tenant_firstName,
+      tenant_lastName: req.body.tenant_lastName,
+      tenant_unitNumber: req.body.tenant_unitNumber,
+      tenant_mobileNumber: req.body.tenant_mobileNumber,
+      tenant_workNumber: req.body.tenant_workNumber,
+      tenant_homeNumber: req.body.tenant_homeNumber,
+      tenant_faxPhoneNumber: req.body.tenant_faxPhoneNumber,
+      tenant_email: req.body.tenant_email,
+      tenant_password: req.body.tenant_password,
+      alternate_email: req.body.alternate_email,
+      tenant_residentStatus: req.body.tenant_residentStatus,
+      birth_date: req.body.birth_date,
+      textpayer_id: req.body.textpayer_id,
+      comments: req.body.comments,
+      contact_name: req.body.contact_name,
+      relationship_tenants: req.body.relationship_tenants,
+      email: req.body.email,
+      emergency_PhoneNumber: req.body.emergency_PhoneNumber
+    };  
 
     // Find the tenant by ID
     const tenant = await Tenants.findById(tenantId);
@@ -690,11 +711,17 @@ router.put("/tenant/:tenantId/entries/:entryId", async (req, res) => {
       return res.status(404).json({ statusCode: 404, message: "Tenant not found" });
     }
 
-    // Update the entire tenant object with the updated data
-    tenant.set(updatedTenantData);
+    const entryToUpdate = tenant.entries.find(entry => entry.entryIndex === entryIndex);
 
-    // Save the updated tenant document
+    if (!entryToUpdate) {
+      return res.status(404).json({ statusCode: 404, message: "Entry not found" });
+    }
+
+    Object.assign(entryToUpdate, updatedTenantData);
+
     const result = await tenant.save();
+    // Update the entire tenant object with the updated data
+    tenant.set(updatedData);
 
     res.json({
       statusCode: 200,

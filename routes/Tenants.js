@@ -415,16 +415,14 @@ router.get("/tenant_summary/tenant/:tenant_email", async (req, res) => {
 });
 
  // Define a route to get a tenant's rental addresses by email
- router.get("/tenant_rental_addresses/:tenant_email", async (req, res) => {
+ router.get("/tenant_rental_addresses/:tenantId", async (req, res) => {
   try {
-    const email = req.params.tenant_email;
-
-    // Use await to fetch data and handle the result as an array
-    const data = await Tenants.find({ tenant_email: email });
+    const userId = req.params.tenantId; // Get the user ID from the URL parameter
+    var data = await Tenants.findById(userId);
    
-    if (data && data.length > 0) {
-      // Extract rental addresses from the data using "rental_adress"
-      const rental_adress = data.map(tenant => tenant.rental_adress);
+    if (data && data.entries.length > 0) {
+      // Extract rental addresses from the data.entries array
+      const rental_adress = data.entries.map(entry => entry.rental_adress);
 
       res.json({
         rental_adress: rental_adress, // Use "rental_adress" here
@@ -432,7 +430,7 @@ router.get("/tenant_summary/tenant/:tenant_email", async (req, res) => {
         message: "Rental addresses retrieved successfully for the tenant",
       });
     } else {
-      // If data is an empty array, it means no results were found for the email
+      // If data.entries is an empty array, it means no results were found for the tenant ID
       res.status(404).json({
         statusCode: 404,
         message: "Tenant not found or has no rental addresses",
@@ -447,6 +445,7 @@ router.get("/tenant_summary/tenant/:tenant_email", async (req, res) => {
     });
   }
 });
+
 
 //fillter api lease type wise
 router.post("/filterlease_type", async (req, res) => {

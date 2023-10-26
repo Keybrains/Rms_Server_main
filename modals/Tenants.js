@@ -5,8 +5,8 @@ const entrySchema = new Schema({
   entryIndex: { type: String },
   rental_adress: { type: String },
   lease_type: { type: String },
-  start_date: { type: Date },
-  end_date: { type: Date },
+  start_date: { type: String },
+  end_date: { type: String },
   leasing_agent: { type: String },
   rent_cycle:{ type: String },
   amount: { type: Number },
@@ -42,7 +42,7 @@ const entrySchema = new Schema({
 
   recuring_amount: { type: Number },
   recuring_account:{ type: String },
-  recuringnextDue_date: { type: Date },
+  recuringnextDue_date: { type: String },
   recuringmemo:{ type: String },
   recuringfrequency:{ type: String },
 
@@ -50,7 +50,7 @@ const entrySchema = new Schema({
 
   onetime_amount: { type: Number },
   onetime_account:{ type: String },
-  onetime_Due_date: { type: Date },
+  onetime_Due_date: { type: String },
   onetime_memo:{ type: String },
 
   // add account 
@@ -84,7 +84,7 @@ const tenantsSchema = new Schema({
   tenant_residentStatus: { type: String },
 
   // personal information
-  birth_date: { type: Date },
+  birth_date: { type: String },
   textpayer_id: { type: String },
   comments: { type: String },
 

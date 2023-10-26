@@ -31,6 +31,7 @@ const entrySchema = new Schema({
   property_image: { type: Array },
 });
 
+
 const registerSchema = new Schema({
   //   Add Rental owner
   rentalOwner_firstName: { type: String },

@@ -95,7 +95,6 @@ router.post("/tenant", async (req, res) => {
         isrenton: true,
       });
     }
-
     res.json({
       statusCode: 200,
       data: data,
@@ -109,51 +108,116 @@ router.post("/tenant", async (req, res) => {
   }
 });
 
+
 // router.post("/tenant", async (req, res) => {
 //   try {
-//     if (req.body.selectedTenantId) {
-//       // Update existing tenant
-//       const existingTenant = await Tenants.findOne({ _id: req.body.selectedTenantId });
-
-//       console.log(existingTenant, "existingTenant")
-
-//       if (existingTenant) {
-//         // Merge the leasing form data with the existing tenant's data
-//         const updatedTenantData = { ...existingTenant.toObject(), ...req.body };
-
-//         // Update the tenant
-//         const updatedTenant = await Tenants.findOneAndUpdate(
-//           { tenant_id: req.body.selectedTenantId },
-//           updatedTenantData,
-//           { new: true }
-//         );
-
-//         res.json({
-//           statusCode: 200,
-//           data: updatedTenant,
-//           message: "Update Tenant Data Successfully",
-//         });
-//       } else {
-//         // Handle the case where the selected tenant does not exist
-//         res.json({
-//           statusCode: 400,
-//           message: "Selected tenant not found.",
-//         });
-//       }
-//     } else {
-//       // Create a new tenant
-//       var count = await Tenants.count();
-//       // ... (rest of your existing code to create a new tenant)
+//     var count = await Tenants.count();
+//     function pad(num) {
+//       num = num.toString();
+//       while (num.length < 2) num = "0" + num;
+//       return num;
 //     }
+//     req.body["tenant_id"] = pad(count + 1);
+
+//     const {
+//       tenant_id,
+//       tenant_firstName,
+//       tenant_lastName,
+//       tenant_unitNumber,
+//       tenant_mobileNumber,
+//       tenant_workNumber,
+//       tenant_homeNumber,
+//       tenant_faxPhoneNumber,
+//       tenant_email,
+//       tenant_password,
+//       alternate_email,
+//       tenant_residentStatus,
+//       birth_date,
+//       textpayer_id,
+//       comments,
+//       contact_name,
+//       relationship_tenants,
+//       email,
+//       emergency_PhoneNumber,
+//       entries,
+//       rental_adress,
+//     } = req.body;
+
+//     const currentDate = new Date();
+//     const endDate = new Date(req.body.end_date);
+
+//     if (endDate <= currentDate) {
+//       req.body["propertyOnRent"] = true;
+//     } else {
+//       req.body["propertyOnRent"] = false;
+//     }
+
+//     entries.forEach((entry, index) => {
+//       entry.entryIndex = (index + 1).toString().padStart(2, "0");
+//     });
+
+//     const data = await Tenants.create({
+//       tenant_id,
+//       tenant_firstName,
+//       tenant_lastName,
+//       tenant_unitNumber,
+//       tenant_mobileNumber,
+//       tenant_workNumber,
+//       tenant_homeNumber,
+//       tenant_faxPhoneNumber,
+//       tenant_email,
+//       tenant_password,
+//       alternate_email,
+//       tenant_residentStatus,
+//       birth_date,
+//       textpayer_id,
+//       comments,
+//       contact_name,
+//       relationship_tenants,
+//       email,
+//       emergency_PhoneNumber,
+//       entries,
+//     });
+
+//     data.entries = entries;
+
+//     const tenantRentalAddress = req.body.rental_adress;
+
+//     const matchingRental = await Rentals.findOne({
+//       "entries.rental_adress": tenantRentalAddress,
+//     });
+
+//     if (matchingRental) {
+//       // Find the matching entry in the rental
+//       const matchingEntry = matchingRental.entries.find(
+//         (entries) => entries.rental_adress === tenantRentalAddress
+//       );
+
+//       console.log("Matching Rental:", matchingRental);
+//       console.log("Matching Entry:", matchingEntry);
+
+//       if (matchingEntry) {
+//         matchingEntry.isrenton = true;
+//         await matchingRental.save();
+//       }
+//     }
+
+//     res.json({
+//       statusCode: 200,
+//       data: data,
+//       message: "Add Tenants Successfully",
+//     });
 //   } catch (error) {
 //     res.json({
-//       statusCode: 500,
+//       statusCode: false,
 //       message: error.message,
 //     });
 //   }
 // });
 
- 
+
+
+
 //get tenant
   router.get("/tenant", async (req, res) => {
   try {
@@ -678,7 +742,7 @@ router.delete("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
 
 //update recored specific put api 
 //update recored specific put api 
-router.put("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
+router.put("/tenants/:tenantId/entry/:entryIndex", async (req, res) => {
   try {
     const tenantId = req.params.tenantId;
     const entryIndex = req.params.entryIndex;
@@ -716,12 +780,11 @@ router.put("/tenant/:tenantId/entry/:entryIndex", async (req, res) => {
     if (!entryToUpdate) {
       return res.status(404).json({ statusCode: 404, message: "Entry not found" });
     }
-
+    tenant.set(updatedData);
     Object.assign(entryToUpdate, updatedTenantData);
 
     const result = await tenant.save();
-    // Update the entire tenant object with the updated data
-    tenant.set(updatedData);
+  
 
     res.json({
       statusCode: 200,
@@ -787,5 +850,47 @@ router.get("/tenant_summary/:tenantId/entry/:entryIndex", async (req, res) => {
   }
 });
 
+
+router.get("/tenant/:tenantId/entries", async (req, res) => {
+  try {
+    const tenantId = req.params.tenantId;
+
+    const tenants = await Tenants.find();
+    const tenant = tenants.find((t) => t._id.toString() === tenantId);
+
+    if (!tenant || !tenant.entries) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Tenant not found or has no entries",
+      });
+      return;
+    }
+
+    // Map all entries for the tenant
+    const entries = tenant.entries.map((entry) => {
+      return {
+        _id: tenant._id,
+        tenant_id: tenant.tenant_id,
+        tenant_firstName: tenant.tenant_firstName,
+        tenant_lastName: tenant.tenant_lastName,
+        tenant_mobileNumber: tenant.tenant_mobileNumber,
+        tenant_email: tenant.tenant_email,
+        tenant_password: tenant.tenant_password,
+        entries: entry,
+      };
+    });
+
+    res.json({
+      data: entries,
+      statusCode: 200,
+      message: "Read Tenant Entries",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;

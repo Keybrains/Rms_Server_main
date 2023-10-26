@@ -74,6 +74,31 @@ router.post("/applicant", async (req, res) => {
   }
 });
 
+ //get applicant summary
+ router.get("/applicant_summary/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    var data = await Applicant.findById(userId);
+    if (data) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Summary get Successfully",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "summary not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 
 

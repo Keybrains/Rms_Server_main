@@ -12,8 +12,8 @@ const applicantSchema = new Schema({
   applicant_homeNumber: { type: Number },
   applicant_businessNumber: { type: Number },
   applicant_telephoneNumber: { type: Number },
-  rental_adress: { type: String },
-
+  applicant_property: { type: String },
+  applicant_checklist: {type: Array}
 });
 
 module.exports = mongoose.model("applicant", applicantSchema);

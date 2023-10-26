@@ -710,4 +710,31 @@ router.put("/rental/:id/entry/:entryIndex", async (req, res) => {
     });
   }
 });
+
+router.get("/Rentals_summary/tenant/:rental_address", async (req, res) => {
+  try {
+    const address = req.params.rental_address;
+    const data = await Rentals.find({ "entries.rental_adress" : address });
+
+    if (data && data.length > 0) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Summary data retrieved successfully",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Summary data not found for the provided address",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
+
 module.exports = router;

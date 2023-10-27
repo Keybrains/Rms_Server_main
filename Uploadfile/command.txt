@@ -1,0 +1,42 @@
+=========git command=========
+git init
+git add .
+git commit -m "Rms_client2"
+git branch -M main
+git push -u origin main
+
+
+
+git init
+git add .
+git commit -m "RMS Server"
+git branch -M main
+git push -u origin main
+
+
+=======putty ==========
+
+root / ?uF2ePl+0=iT&@81RlWR 
+64.225.8.160
+
+?uF2ePl+0=iT&@81RlWR    password 
+
+==========
+
+kbtplseo@gmail.com aur password github wala
+
+========git hub ========
+keybrains           ====user  name 
+TIM$vishHMS13     ======== password
+
+
+avanivaghani@keybrainstech.com
+7St*gbOT.mt!
+
+
+
+
+In the rent cycle of the tenant, do you want to get payment monthly or every two month, quarterly, yearly option in the rent cycle?
+
+
+

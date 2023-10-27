@@ -23,7 +23,7 @@ var LedgerRouter = require ("./routes/Ledger");
 var NotificationRouter = require ("./routes/Notification");
 var AddRicuringAcc = require ("./routes/AddRecuringAcc");
 var OneTimeChargeAcc = require ("./routes/OneTimeAcc");
-var UploadFile = require ("./routes/UploadFile");
+// var UploadFile = require ("./routes/UploadFile");
 var app = express();
 
 // view engine setup

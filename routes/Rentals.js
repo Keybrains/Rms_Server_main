@@ -333,30 +333,7 @@ router.get("/rentals_summary/:id", async (req, res) => {
 });
 
 
-router.get("/Rentals_summary/tenant/:rental_address", async (req, res) => {
-  try {
-    const address = req.params.rental_address;
-    const data = await Rentals.find({ rental_adress: address });
 
-    if (data && data.length > 0) {
-      res.json({
-        data: data,
-        statusCode: 200,
-        message: "Summary data retrieved successfully",
-      });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Summary data not found for the provided address",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
-});
 
 
 //fillter api property_type wise
@@ -480,17 +457,27 @@ router.get("/property", async (req, res) => {
 
 
 
+
 //find rental_address(proparty in lease form) 
 router.get("/property_onrent", async (req, res) => {
   try {
-    var data = await Rentals.find({isrenton:true}).select("rental_adress")
-    res.json({
-      statusCode: 200,
-      data: data, 
-      message: "read all property",
-    });
+    const data = await Rentals.find({ "entries.isrenton": true }, "entries.rental_adress");
+    
+    if (data.length > 0) {
+      const rentalAddresses = data.map(entry => entry.entries[0].rental_adress);
+      res.json({
+        statusCode: 200,
+        data: rentalAddresses,
+        message: "Read all rental addresses",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "No rental addresses found",
+      });
+    }
   } catch (error) {
-    res.json({
+    res.status(500).json({
       statusCode: 500,
       message: error.message,
     });

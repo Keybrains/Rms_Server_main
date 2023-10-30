@@ -12,7 +12,7 @@ const applicantSchema = new Schema({
   applicant_homeNumber: { type: Number },
   applicant_businessNumber: { type: Number },
   applicant_telephoneNumber: { type: Number },
-  applicant_property: { type: String },
+  rental_adress: { type: String },
   applicant_checklist: {type: Array}
 });
 

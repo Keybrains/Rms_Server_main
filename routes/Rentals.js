@@ -46,13 +46,6 @@ router.post("/rentals", async (req, res) => {
       entries,
     } = req.body;
 
-    // Check if some condition based on the data you receive
-    // For example, you can check property_type and set a field accordingly
-    // if (property_type === "Residential") {
-    //   // Perform specific actions for residential properties
-    // } else if (property_type === "Commercial") {
-    //   // Perform specific actions for commercial properties
-    // }
 
     entries.forEach((entry, index) => {
       entry.entryIndex = (index + 1).toString().padStart(2, "0");

@@ -100,6 +100,43 @@ router.post("/applicant", async (req, res) => {
 });
 
 
+// Add a new route to update the applicant checklist
+router.put("/applicant/:id/checklist", async (req, res) => {
+  try {
+    const applicantId = req.params.id;
+    const checklist = req.body.applicant_checklist;
 
+    if (!applicantId || !checklist) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Invalid request. Please provide 'applicant_checklist'.",
+      });
+    }
+
+    const updatedApplicant = await Applicant.findByIdAndUpdate(
+      applicantId,
+      { applicant_checklist: checklist },
+      { new: true }
+    );
+
+    if (!updatedApplicant) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "Applicant not found.",
+      });
+    }
+
+    res.json({
+      statusCode: 200,
+      data: updatedApplicant,
+      message: "Applicant Checklist Updated Successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      statusCode: 500,
+      message: err.message,
+    });
+  }
+});
 
 module.exports = router;

@@ -57,10 +57,11 @@ router.post('/uploadfile', upload.single('file'), function (req, res, next) {
   
   if (req.file) {
     console.log(`File ${req.file.originalname} uploaded successfully`);
-    res.render('index', { title: 'File uploaded successfully' });
+    res.send('File uploaded successfully'); // Send a simple success message
   } else {
     res.status(400).send('File upload failed');
   }
-});
+}); 
+
 
 module.exports = router;

@@ -872,6 +872,7 @@ router.get("/tenant_summary/:tenantId/entry/:entryIndex", async (req, res) => {
 });
 
 
+
 router.get("/tenant/:tenantId/entries", async (req, res) => {
   try {
     const tenantId = req.params.tenantId;
@@ -914,6 +915,59 @@ router.get("/tenant/:tenantId/entries", async (req, res) => {
   }
 });
 
+//get data specifice rental address wise & entry endex wise 
+router.get("/tenant-detail/tenant/:rental_address", async (req, res) => {
+  try {
+    const rental_adress = req.params.rental_address;
+    console.log("Rental Address:", rental_adress);
+
+    const data = await Tenants.findOne({
+      "entries.rental_adress": rental_adress
+    });
+
+    if (!data) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    const entry = data.entries.find((e) => e.rental_adress === rental_adress);
+
+    if (!entry) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    const tenantDataWithEntry = {
+      _id: data._id,
+      tenant_id: data.tenant_id,
+      tenant_firstName: data.tenant_firstName,
+      tenant_lastName: data.tenant_lastName,
+      tenant_mobileNumber: data.tenant_mobileNumber,
+      tenant_email: data.tenant_email,
+      tenant_password: data.tenant_password,
+      entries: entry,
+    };
+
+    res.json({
+      data: tenantDataWithEntry,
+      statusCode: 200,
+      message: "Read Tenant Entry",
+    });
+  } catch (error) {
+    // Handle errors properly
+    console.error(error); // Log the error for debugging purposes
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  } 
+});
 
 
 module.exports = router;

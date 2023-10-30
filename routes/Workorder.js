@@ -211,6 +211,50 @@ router.get("/workorder/by-staff-member/:staffmember_name", async (req, res) => {
     });
 
     
+     // get workorder data as per rental address
+router.get("/workorder/tenant/:rental_addresses", async (req, res) => {
+  try {
+    const rentalAddresses = req.params.rental_addresses.split('-');
+    
+    if (rentalAddresses.length === 1) {
+      // Handle a single rental address
+      const singleAddress = rentalAddresses[0];
+      const data = await Workorder.find({ rental_adress: singleAddress });
+      if (data) {
+        res.json({
+          data: data,
+          statusCode: 200,
+          message: "Workorder details retrieved successfully",
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Workorder details not found for the single rental address",
+        });
+      }
+    } else {
+      // Handle multiple rental addresses
+      const data = await Workorder.find({ rental_adress: { $in: rentalAddresses } });
+      if (data && data.length > 0) {
+        res.json({
+          data: data,
+          statusCode: 200,
+          message: "Workorder details retrieved successfully for multiple rental addresses",
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Workorder details not found for the multiple rental addresses",
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
   
 
 module.exports = router;

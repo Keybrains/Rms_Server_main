@@ -139,4 +139,55 @@ router.put("/applicant/:id/checklist", async (req, res) => {
   }
 });
 
+
+router.get("/applicant_summary/rental/:rental_adress", async (req, res) => {
+  try {
+    const rental = req.params.rental_adress; // Retrieve the rental address from the request parameters
+    const data = await Applicant.find({ rental_adress: rental });
+
+    if (data && data.length > 0) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Get all data successfully for the specified rental address",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Data not found for the specified rental address",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
+
+// router.get("/rentals_summary/:rental_adress", async (req, res) => {
+//   try {
+//     const address = req.params.rental_adress; // Get the user ID from the URL parameter
+//     var data = await Rentals.findById(address);
+//     if (data) {
+//       res.json({
+//         data: data,
+//         statusCode: 200,
+//         message: "summaryGet Successfully",
+//       });
+//     } else {
+//       res.status(404).json({
+//         statusCode: 404,
+//         message: "summary not found",
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
 module.exports = router;

@@ -478,13 +478,37 @@ router.get("/property_onrent", async (req, res) => {
 }); 
 
 //find all rental_address
+// router.get("/allproperty", async (req, res) => {
+//   try {
+//     var data = await Rentals.find().select("rental_adress")
+    
+//     res.json({
+//       statusCode: 200,
+//       data: data,
+//       message: "read all property",
+//     });
+//   } catch (error) {
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// }); 
+
 router.get("/allproperty", async (req, res) => {
   try {
-    var data = await Rentals.find().select("rental_adress")
+    // Use the .find() method to retrieve all rental addresses
+    const data = await Rentals.find().select("entries.rental_adress");
+
+    // Extract rental addresses from the data
+    const rentalAddresses = data
+      .filter(entry => entry.entries && entry.entries[0] && entry.entries[0].rental_adress)
+      .map(entry => entry.entries[0].rental_adress);
+
     res.json({
       statusCode: 200,
-      data: data,
-      message: "read all property",
+      data: rentalAddresses,
+      message: "Read all rental addresses",
     });
   } catch (error) {
     res.json({
@@ -492,8 +516,7 @@ router.get("/allproperty", async (req, res) => {
       message: error.message,
     });
   }
-}); 
-
+});
 
 //fillter api rentel_address wise in outstanding balance in lease 
 router.post("/filter_lease", async (req, res) => {

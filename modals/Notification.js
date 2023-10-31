@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// for notification
 const notificationSchema = new Schema({
   workorder_id: { type: String },
   notification_title: { type: String },

@@ -23,6 +23,7 @@ var LedgerRouter = require ("./routes/Ledger");
 var NotificationRouter = require ("./routes/Notification");
 var AddRicuringAcc = require ("./routes/AddRecuringAcc");
 var OneTimeChargeAcc = require ("./routes/OneTimeAcc");
+var PaymentRouter = require ("./routes/Payment");
 // var UploadFile = require ("./routes/UploadFile");
 var app = express();
 
@@ -55,6 +56,7 @@ app.use("/notification",NotificationRouter);
 // app.use("/uploadfile",UploadFile);
 app.use("/recurringAcc",AddRicuringAcc);
 app.use("/onetimecharge",OneTimeChargeAcc);
+app.use("/payment",PaymentRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

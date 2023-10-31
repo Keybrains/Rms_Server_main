@@ -74,6 +74,7 @@ router.post("/applicant", async (req, res) => {
   }
 });
 
+
  //get applicant summary
  router.get("/applicant_summary/:id", async (req, res) => {
   try {
@@ -169,7 +170,7 @@ router.get("/applicant_summary/rental/:rental_adress", async (req, res) => {
 // router.get("/rentals_summary/:rental_adress", async (req, res) => {
 //   try {
 //     const address = req.params.rental_adress; // Get the user ID from the URL parameter
-//     var data = await Rentals.findById(address);
+//     var data = await Rentals.find(address);
 //     if (data) {
 //       res.json({
 //         data: data,

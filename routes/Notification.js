@@ -28,7 +28,10 @@ var workorder = require("../modals/Workorder");
         workorder_id: `${workorder_id}`,
         notification_title: 'Workorder Added',
         notification_details: `Admin created Work Order for ${req.body.workorder.rental_adress} to handle ${req.body.workorder.work_subject}`,
-        isread: false,
+        isTenantread: false,
+        isVendorread: false,
+        isStaffread: false,
+        isAdminread: false,
         istenant: false,
         vendor_name: `${vendor_name}`,
         staffmember_name:`${staffmember_name}`,
@@ -64,7 +67,10 @@ var workorder = require("../modals/Workorder");
         workorder_id: `${workorder_id}`,
         notification_title: 'Tenant Added Workorder',
         notification_details: `Tenant created Work Order for ${req.body.workorder.rental_adress} to handle ${req.body.workorder.work_subject}`,
-        isread: false,
+        isTenantread: false,
+        isVendorread: false,
+        isStaffread: false,
+        isAdminread: false,
         istenant: true,
         // vendor_name: `${vendor_name}`,
         // staffmember_name:`${staffmember_name}`,
@@ -79,7 +85,7 @@ var workorder = require("../modals/Workorder");
   
       res.json({
         statusCode: 200,
-        data: vendorNotification,
+        data: adminNotification,
         message: "Notification Added Successfully",
       });
     } catch (error) {
@@ -99,7 +105,10 @@ var workorder = require("../modals/Workorder");
         workorder_id: `${workorder_id}`,
         notification_title: 'Vendor Update Workorder',
         notification_details: `Vendor added parts and labour to the Work Order for ${req.body.workorder.rental_adress} to handle ${req.body.workorder.work_subject}`,
-        isread: false,
+        isTenantread: false,
+        isVendorread: false,
+        isStaffread: false,
+        isAdminread: false,
         istenant: true,
         // vendor_name: `${vendor_name}`,
         // staffmember_name:`${staffmember_name}`,
@@ -196,61 +205,6 @@ router.get("/staffnotification/:staffmember_name", async (req, res) => {
 });
 
 //get vendor
-router.get("/tenantnotification/:rental_adress", async (req, res) => {
-  try {
-    const tenant = req.params.rental_adress;
-    const notifications = await Notification.find({ istenant: false, rental_adress: tenant });
-
-    if (notifications.length > 0) {
-      res.json({
-        data: notifications,
-        statusCode: 200,
-        message: "Tenant Notification details retrieved successfully",
-      });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Tenant Notification details not found",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
-});
-
-
-// Add a new route for deleting a notification by workorder_id
-router.delete("/notification/:workorder_id", async (req, res) => {
-  try {
-    const workorder_id = req.params.workorder_id;
-
-    // Find and delete the notification by workorder_id
-    const deletedNotification = await Notification.findOneAndDelete({
-      workorder_id: workorder_id,
-    });
-
-    if (deletedNotification) {
-      res.status(200).json({
-        statusCode: 200,
-        message: `Notification with workorder_id ${workorder_id} deleted successfully`,
-      });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: `Notification with workorder_id ${workorder_id} not found`,
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
-});
-
 router.get("/tenantnotification/tenant/:rental_addresses", async (req, res) => {
   try {
     const rentalAddresses = req.params.rental_addresses.split('-');
@@ -294,6 +248,103 @@ router.get("/tenantnotification/tenant/:rental_addresses", async (req, res) => {
     });
   }
 });
+
+
+// Add a new route for deleting a notification by workorder_id
+// router.delete("/notification/:workorder_id", async (req, res) => {
+//   try {
+//     const workorder_id = req.params.workorder_id;
+//     const role = req.query.role;
+
+//     if (role === 'tenant') {
+//         // Allow only tenants to delete notifications
+//         const deletedNotification = await Notification.findOneAndDelete({
+//         workorder_id: workorder_id,
+//       });
+//     } else if (role === 'vendor') {
+//         // Allow only vendors to delete notifications
+//         const deletedNotification = await Notification.findOneAndDelete({
+//         workorder_id: workorder_id,
+//       });
+//     } else if (role === 'staff') {
+//         // Allow only staff to delete notifications
+//         const deletedNotification = await Notification.findOneAndDelete({
+//         workorder_id: workorder_id,
+//       });
+//     }
+//     if (deletedNotification) {
+//       res.status(200).json({
+//         statusCode: 200,
+//         message: `Notification with workorder_id ${workorder_id} deleted successfully`,
+//       });
+//     } else {
+//       res.status(404).json({
+//         statusCode: 404,
+//         message: `Notification with workorder_id ${workorder_id} not found`,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+router.get("/notification/:workorder_id", async (req, res) => {
+  try {
+    const workorder_id = req.params.workorder_id;
+    const role = req.query.role;
+
+    let updateField = '';
+    switch (role) {
+      case 'tenant':
+        updateField = 'isTenantread';
+        break;
+      case 'vendor':
+        updateField = 'isVendorread';
+        break;
+      case 'staff':
+        updateField = 'isStaffread';
+        break;
+      case 'admin':
+        updateField = 'isAdminread';
+        break;
+    }
+
+    if (updateField) {
+      // Find the notification and update the corresponding 'read' field
+      const updatedNotification = await Notification.findOneAndUpdate(
+        { workorder_id: workorder_id },
+        { $set: { [updateField]: true } },
+        { new: true }
+      );
+
+      if (updatedNotification) {
+        res.status(200).json({
+          statusCode: 200,
+          message: `Notification with workorder_id ${workorder_id} updated successfully`,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: `Notification with workorder_id ${workorder_id} not found`,
+        });
+      }
+    } else {
+      res.status(400).json({
+        statusCode: 400,
+        message: "Invalid role provided",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 
 module.exports = router;

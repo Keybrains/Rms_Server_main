@@ -916,48 +916,39 @@ router.get("/tenant/:tenantId/entries", async (req, res) => {
 });
 
 //get data specifice rental address wise & entry endex wise 
-router.get("/tenant-detail/tenant/:rental_address", async (req, res) => {
+router.get("/tenant-detail/tenants/:rental_address", async (req, res) => {
   try {
-    const rental_adress = req.params.rental_address;
-    console.log("Rental Address:", rental_adress);
+    const rental_address = req.params.rental_address;
+    console.log("Rental Address:", rental_address);
 
-    const data = await Tenants.findOne({
-      "entries.rental_adress": rental_adress
+    const data = await Tenants.find({
+      "entries.rental_adress": rental_address // Fix the typo here
     });
 
-    if (!data) {
+    if (!data || data.length === 0) {
       res.status(404).json({
         statusCode: 404,
-        message: "Entry not found",
+        message: "No tenants found for the specified rental address",
       });
       return;
     }
 
-    const entry = data.entries.find((e) => e.rental_adress === rental_adress);
-
-    if (!entry) {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Entry not found",
-      });
-      return;
-    }
-
-    const tenantDataWithEntry = {
-      _id: data._id,
-      tenant_id: data.tenant_id,
-      tenant_firstName: data.tenant_firstName,
-      tenant_lastName: data.tenant_lastName,
-      tenant_mobileNumber: data.tenant_mobileNumber,
-      tenant_email: data.tenant_email,
-      tenant_password: data.tenant_password,
-      entries: entry,
-    };
+    // Optionally, you can map the data to extract the desired fields if needed.
+    const tenantDataWithEntries = data.map((tenant) => ({
+      _id: tenant._id,
+      tenant_id: tenant.tenant_id,
+      tenant_firstName: tenant.tenant_firstName,
+      tenant_lastName: tenant.tenant_lastName,
+      tenant_mobileNumber: tenant.tenant_mobileNumber,
+      tenant_email: tenant.tenant_email,
+      tenant_password: tenant.tenant_password,
+      entries: tenant.entries,
+    }));
 
     res.json({
-      data: tenantDataWithEntry,
+      data: tenantDataWithEntries,
       statusCode: 200,
-      message: "Read Tenant Entry",
+      message: "Read Tenant Entries",
     });
   } catch (error) {
     // Handle errors properly
@@ -966,8 +957,9 @@ router.get("/tenant-detail/tenant/:rental_address", async (req, res) => {
       statusCode: 500,
       message: "Internal server error",
     });
-  } 
+  }
 });
+
 
 //get tenant name only rental address wise 
 router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
@@ -1008,5 +1000,25 @@ router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
   }
 });
 
+//get id wise rental address
+router.get('/rental-address/:id', async (req, res) => {
+  try {
+    const tenantId = req.params.id;
+
+    // Find the tenant document by ID
+    const tenant = await Tenants.findById(tenantId);
+
+    if (!tenant) {
+      return res.status(404).json({ message: 'Tenant not found' });
+    }
+
+    // Extract and send the rental addresses
+    const rentalAddresses = tenant.entries.map(entry => entry.rental_adress);
+
+    res.status(200).json({ rentalAddresses });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;

@@ -969,5 +969,47 @@ router.get("/tenant-detail/tenant/:rental_address", async (req, res) => {
   } 
 });
 
+//get tenant name only rental address wise 
+router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
+  try {
+    const rental_address = req.params.rental_address;
+    console.log("Rental Address:", rental_address);
+
+    const data = await Tenants.findOne({
+      "entries.rental_adress": rental_address
+    });
+
+    if (!data) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    const tenantData = {
+      tenant_firstName: data.tenant_firstName,
+      tenant_lastName: data.tenant_lastName,
+    };
+    console.log("tenantData",tenantData)
+
+    res.json({
+      data: tenantData,
+      statusCode: 200,
+      message: "Tenant Name Details",
+    });
+  } catch (error) {
+    // Handle errors properly
+    console.error(error);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+});
+
+
+
+
 
 module.exports = router;

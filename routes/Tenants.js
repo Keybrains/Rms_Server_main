@@ -961,7 +961,7 @@ router.get("/tenant-detail/tenants/:rental_address", async (req, res) => {
 });
 
 
-//get tenant name only rental address wise 
+//get tenant name only rental address wise get data 
 router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
   try {
     const rental_address = req.params.rental_address;

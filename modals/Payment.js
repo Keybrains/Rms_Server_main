@@ -13,6 +13,7 @@ const paymentSchema = new Schema({
     
   //   Add  payment
   payment_id:{type: String},
+  rental_adress: { type: String },
   date: { type: String },
   amount: { type: Number },
   payment_method:{ type: String },

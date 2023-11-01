@@ -1009,7 +1009,4 @@ router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
 });
 
 
-
-
-
 module.exports = router;

@@ -1,13 +1,13 @@
 var express = require("express");
 var router = express.Router();
-var Tenants = require("../modals/Tenants");
-var Rentals = require("../modals/Rentals");
+var Tenants = require("../../modals/Tenants");
+var Rentals = require("../../modals/Rentals");
 var {
   verifyToken,
   hashPassword,
   hashCompare,
   createToken,
-} = require("../authentication");
+} = require("../../authentication");
 var JWT = require("jsonwebtoken");
 var JWTD = require("jwt-decode");
 const nodemailer = require("nodemailer");

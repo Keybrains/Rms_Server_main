@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var Workorder = require("../modals/Workorder");
+var Workorder = require("../../modals/Workorder");
 // var {verifyToken} = require("../authentication");
 
 // Add workorder api

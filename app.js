@@ -6,24 +6,24 @@ var logger = require("morgan");
 var cors = require("cors");
 
 var dbCollation = require("./db");
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var RegisterRouter = require("./routes/Register");
-var RentalsRouter = require("./routes/Rentals");
-var NewPropartyRouter = require("./routes/NewPropaty");
-var TenantsRouter = require("./routes/Tenants");
-var AddStaffMember = require ("./routes/AddStaffMember");
-var RentalOwners = require ("./routes/RentalOwners");
-var ApplicantRouter = require ("./routes/Applicants");
-var AgentRouter = require ("./routes/Addagent")
-var VendorRouter = require ("./routes/Vendor");
-var WorkorderRouter = require ("./routes/Workorder");
-var AccountRouter = require ("./routes/AddAccount");
-var LedgerRouter = require ("./routes/Ledger");
-var NotificationRouter = require ("./routes/Notification");
-var AddRicuringAcc = require ("./routes/AddRecuringAcc");
-var OneTimeChargeAcc = require ("./routes/OneTimeAcc");
-var PaymentRouter = require ("./routes/Payment");
+var indexRouter = require("./routes/api/index");
+var usersRouter = require("./routes/api/users");
+var RegisterRouter = require("./routes/api/Register");
+var RentalsRouter = require("./routes/api/Rentals");
+var NewPropartyRouter = require("./routes/api/NewPropaty");
+var TenantsRouter = require("./routes/api/Tenants");
+var AddStaffMember = require ("./routes/api/AddStaffMember");
+var RentalOwners = require ("./routes/api/RentalOwners");
+var ApplicantRouter = require ("./routes/api/Applicants");
+var AgentRouter = require ("./routes/api/Addagent")
+var VendorRouter = require ("./routes/api/Vendor");
+var WorkorderRouter = require ("./routes/api/Workorder");
+var AccountRouter = require ("./routes/api/AddAccount");
+var LedgerRouter = require ("./routes/api/Ledger");
+var NotificationRouter = require ("./routes/api/Notification");
+var AddRicuringAcc = require ("./routes/api/AddRecuringAcc");
+var OneTimeChargeAcc = require ("./routes/api/OneTimeAcc");
+var PaymentRouter = require ("./routes/api/Payment");
 // var UploadFile = require ("./routes/UploadFile");
 var app = express();
 
@@ -38,25 +38,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter); 
-app.use("/register", RegisterRouter);
-app.use("/rentals", RentalsRouter);
-app.use("/newproparty", NewPropartyRouter);
-app.use("/tenant", TenantsRouter);
-app.use("/addstaffmember",AddStaffMember);
-app.use("/rentalowner",RentalOwners);
-app.use("/applicant",ApplicantRouter);
-app.use("/addagent",AgentRouter);
-app.use("/addaccount",AccountRouter);
-app.use("/vendor",VendorRouter);
-app.use("/workorder",WorkorderRouter);
-app.use("/ledger",LedgerRouter);
-app.use("/notification",NotificationRouter);
+app.use("/api", indexRouter);
+app.use("/api/users", usersRouter); 
+app.use("/api/register", RegisterRouter);
+app.use("/api/rentals", RentalsRouter);
+app.use("/api/newproparty", NewPropartyRouter);
+app.use("/api/tenant", TenantsRouter);
+app.use("/api/addstaffmember",AddStaffMember);
+app.use("/api/rentalowner",RentalOwners);
+app.use("/api/applicant",ApplicantRouter);
+app.use("/api/addagent",AgentRouter);
+app.use("/api/addaccount",AccountRouter);
+app.use("/api/vendor",VendorRouter);
+app.use("/api/workorder",WorkorderRouter);
+app.use("/api/ledger",LedgerRouter);
+app.use("/api/notification",NotificationRouter);
 // app.use("/uploadfile",UploadFile);
-app.use("/recurringAcc",AddRicuringAcc);
-app.use("/onetimecharge",OneTimeChargeAcc);
-app.use("/payment",PaymentRouter);
+app.use("/api/recurringAcc",AddRicuringAcc);
+app.use("/api/onetimecharge",OneTimeChargeAcc);
+app.use("/api/payment",PaymentRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -68,7 +68,7 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
+  // render the error page  
   res.status(err.status || 500);
   res.render("error");
 });

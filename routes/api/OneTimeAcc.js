@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var OneTimeAcc = require("../modals/OneTimeAcc");
+var OneTimeAcc = require("../../modals/OneTimeAcc");
 
 //add account 
 // router.post("/addaccount", async (req, res) => {

@@ -1,12 +1,12 @@
 var express = require("express");
 var router = express.Router();
-var AddRecuringAcc = require("../modals/AddRecuringAcc");
+var AddAccount = require("../../modals/AddAccount");
 
 //add account 
 // router.post("/addaccount", async (req, res) => {
 //     try {
 
-//       var data = await AddRecuringAcc.create(req.body);
+//       var data = await AddAccount.create(req.body);
 //       res.json({
 //         statusCode: 200,
 //         data: data,
@@ -20,39 +20,39 @@ var AddRecuringAcc = require("../modals/AddRecuringAcc");
 //     }
 //   });
 
-
-  router.post("/addRecuringAcc", async (req, res) => {
-    try {
-      // Check if an account with the same name already exists
-      const existingAccount = await AddRecuringAcc.findOne({ account_name: req.body.account_name });
-      
-      if (existingAccount) {
-        return res.status(400).json({
-          statusCode: 400,
-          message: "An account with the same name already exists.",
-        });
-      }
-  
-      // If no existing account with the same name, create a new one
-      const data = await AddRecuringAcc.create(req.body);
-      res.json({
-        statusCode: 200,
-        data: data,
-        message: "Account added successfully",
-      });
-    } catch (error) {
-      res.status(500).json({
-        statusCode: 500,
-        message: error.message,
+//add account 
+router.post("/addaccount", async (req, res) => {
+  try {
+    // Check if an account with the same name already exists
+    const existingAccount = await AddAccount.findOne({ account_name: req.body.account_name });
+    
+    if (existingAccount) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "An account with the same name already exists.",
       });
     }
-  });
+
+    // If no existing account with the same name, create a new one
+    const data = await AddAccount.create(req.body);
+    res.json({
+      statusCode: 200,
+      data: data,
+      message: "Account added successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
 
 
   //get account
   router.get("/addaccount", async (req, res) => {
     try {
-      var data = await AddRecuringAcc.find();
+      var data = await AddAccount.find();
       res.json({
         data: data,
         statusCode: 200,
@@ -69,7 +69,7 @@ var AddRecuringAcc = require("../modals/AddRecuringAcc");
   //delete account 
   router.delete("/delete_account", async (req, res) => {
     try {
-      let result = await AddRecuringAcc.deleteMany({
+      let result = await AddAccount.deleteMany({
         _id: { $in: req.body },
       });
       res.json({
@@ -88,7 +88,7 @@ var AddRecuringAcc = require("../modals/AddRecuringAcc");
    //edit account 
  router.put("/account/:id", async (req, res) => {
   try {
-    let result = await AddRecuringAcc.findByIdAndUpdate(req.params.id, req.body);
+    let result = await AddAccount.findByIdAndUpdate(req.params.id, req.body);
     res.json({
       statusCode: 200,
       data: result,
@@ -105,7 +105,7 @@ var AddRecuringAcc = require("../modals/AddRecuringAcc");
   //find accountname 
 router.get("/find_accountname", async (req, res) => {
   try {
-    var data = await AddRecuringAcc.find().select("account_name")
+    var data = await AddAccount.find().select("account_name")
     res.json({
       statusCode: 200,
       data: data,
@@ -135,7 +135,7 @@ router.post("/filteraccount_name", async (req, res) => {
         totalCount: [{ $count: "count" }],
       },
     });
-    let result = await AddRecuringAcc.aggregate(pipeline);
+    let result = await AddAccount.aggregate(pipeline);
     const responseData = {
       data: result[0].data,
       totalCount:

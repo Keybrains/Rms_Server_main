@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var Applicant = require("../modals/Applicants");
+var Applicant = require("../../modals/Applicants");
 
   //   Add  applicant
 router.post("/applicant", async (req, res) => {

@@ -1,7 +1,7 @@
 
 var express = require("express");
 var router = express.Router();
-var Payment = require("../modals/Payment");
+var Payment = require("../../modals/Payment");
 
   //   Add  Payment
 router.post("/add_payment", async (req, res) => {

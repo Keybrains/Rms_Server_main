@@ -5,8 +5,8 @@ var {
   hashPassword,
   hashCompare,
   createToken,
-} = require("../authentication");
-var Registers = require("../modals/Register");
+} = require("../../authentication");
+var Registers = require("../../modals/Register");
 var JWT = require("jsonwebtoken");
 var JWTD = require("jwt-decode");
 

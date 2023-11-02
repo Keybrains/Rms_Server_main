@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var Ledger = require("../modals/Ledger");
+var Ledger = require("../../modals/Ledger");
 
 //add ledger
 //  router.post("/ledger", async (req, res) => {

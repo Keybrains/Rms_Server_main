@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var NewProparty = require("../modals/NewProparty");
-var Rentals = require ("../modals/Rentals");
+var NewProparty = require("../../modals/NewProparty");
+var Rentals = require ("../../modals/Rentals");
 
 
 router.post("/newproparty", async (req, res) => {

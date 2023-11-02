@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var Rentals = require("../modals/Rentals");
-var Tenants = require("../modals/Tenants");
+var Rentals = require("../../modals/Rentals");
+var Tenants = require("../../modals/Tenants");
 // var {verifyToken} = require("../authentication");
 
 // Post api working

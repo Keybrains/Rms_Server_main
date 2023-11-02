@@ -1,13 +1,13 @@
 var express = require("express");
 var router = express.Router();
-var Vendor = require("../modals/Vendor");
-var Workorder = require("../modals/Workorder");
+var Vendor = require("../../modals/Vendor");
+var Workorder = require("../../modals/Workorder");
 var {
   verifyToken,
   hashPassword,
   hashCompare,
   createToken,
-} = require("../authentication");
+} = require("../../authentication");
 var JWT = require("jsonwebtoken");
 var JWTD = require("jwt-decode");
 

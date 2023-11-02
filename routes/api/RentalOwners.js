@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var RentalOwners = require("../modals/RentalOwners");
+var RentalOwners = require("../../modals/RentalOwners");
 
 
 //add rental owner

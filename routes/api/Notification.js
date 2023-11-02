@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var Notification = require("../modals/Notification");
-var workorder = require("../modals/Workorder");
+var Notification = require("../../modals/Notification");
+var workorder = require("../../modals/Workorder");
 
 
 

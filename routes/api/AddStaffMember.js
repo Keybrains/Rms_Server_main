@@ -1,16 +1,16 @@
 var express = require("express");
 var router = express.Router();
-var AddStaffMember = require("../modals/AddStaffMember");
+var AddStaffMember = require("../../modals/AddStaffMember");
 var {
   verifyToken,
   hashPassword,
   hashCompare,
   createToken,
-} = require("../authentication");
+} = require("../../authentication");
 var JWT = require("jsonwebtoken");
 var JWTD = require("jwt-decode");
-var Workorder = require("../modals/Workorder");
-var Rentals = require("../modals/Rentals");
+var Workorder = require("../../modals/Workorder");
+var Rentals = require("../../modals/Rentals");
 
 // Add staffmember
 router.post("/addstaffmember", async (req, res) => {

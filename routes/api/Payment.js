@@ -18,7 +18,7 @@ router.post("/add_payment", async (req, res) => {
         statusCode: 500,
         message: error.message,
       });
-    }
+    } 
   });
 
 
@@ -75,5 +75,31 @@ router.post("/add_payment", async (req, res) => {
       }
     });
 
+
+    //get Payment table  summary data id wise 
+
+router.get("/Payment_summary/:id", async (req, res) => {
+  try {
+    const userId = req.params.id; // Get the user ID from the URL parameter
+    var data = await Payment.findById(userId);
+    if (data) {
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "summaryGet Successfully",
+      });
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "summary not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;

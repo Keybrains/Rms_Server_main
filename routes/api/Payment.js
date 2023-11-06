@@ -2,6 +2,7 @@
 var express = require("express");
 var router = express.Router();
 var Payment = require("../../modals/Payment");
+var Tenants = require("../../modals/Tenants");
 
   //   Add  Payment
 router.post("/add_payment", async (req, res) => {
@@ -22,22 +23,29 @@ router.post("/add_payment", async (req, res) => {
   });
 
 
-    // get  Payment
-    router.get("/payment", async (req, res) => {
-        try {
-          var data = await Payment.find();
-          res.json({
-            data: data,
-            statusCode: 200,
-            message: "Read All Payments",
-          });
-        } catch (error) {
-          res.json({
-            statusCode: 500,
-            message: error.message,
-          });
-        }
+  router.get("/payment", async (req, res) => {
+    try {
+      var data = await Payment.find();
+  
+      if (data.length === 0) {
+        // Log a message for debugging
+        console.log("No payment records found.");
+      }
+  
+      res.json({
+        data: data,
+        statusCode: 200,
+        message: "Read All Payments",
       });
+    } catch (error) {
+      console.error(error); // Log the error to the console for debugging
+      res.json({
+        statusCode: 500,
+        message: error.message,
+      });
+    }
+  });
+  
     
     // delete Payment
       router.delete("/Payment", async (req, res) => {
@@ -101,5 +109,37 @@ router.get("/Payment_summary/:id", async (req, res) => {
     });
   }
 });
+
+//get tennat data as per payment in tenant firstname 
+router.get("/payment/financial", async (req, res) => {
+  try {
+    const data = await Payment.aggregate([
+      {
+        $lookup: {
+          from: "tenants", // Name of the tenant collection in your database
+          localField: "tenant_firstName", // Field to join on in the payment collection
+          foreignField: "tenant_firstName", // Field to join on in the tenant collection
+          as: "tenantData" // Alias for the joined data
+        }
+      },
+      {
+        $unwind: "$tenantData" // Unwind the tenantData array (as it's an array due to $lookup)
+      }
+    ]);
+
+    res.json({
+      data,
+      statusCode: 200,
+      message: "Read All Payments with Tenant Data",
+    });
+  } catch (error) {
+    console.error(error); // Log the error to the console for debugging
+    res.json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 module.exports = router;

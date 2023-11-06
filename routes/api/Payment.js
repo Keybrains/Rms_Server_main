@@ -111,35 +111,85 @@ router.get("/Payment_summary/:id", async (req, res) => {
 });
 
 //get tennat data as per payment in tenant firstname 
-router.get("/payment/financial", async (req, res) => {
-  try {
-    const data = await Payment.aggregate([
-      {
-        $lookup: {
-          from: "tenants", // Name of the tenant collection in your database
-          localField: "tenant_firstName", // Field to join on in the payment collection
-          foreignField: "tenant_firstName", // Field to join on in the tenant collection
-          as: "tenantData" // Alias for the joined data
-        }
-      },
-      {
-        $unwind: "$tenantData" // Unwind the tenantData array (as it's an array due to $lookup)
-      }
-    ]);
+// router.get("/payment/financial", async (req, res) => {
+//   try {
+//     const data = await Payment.aggregate([
+//       {
+//         $lookup: {
+//           from: "tenants", // Name of the tenant collection in your database
+//           localField: "tenant_firstName", // Field to join on in the payment collection
+//           foreignField: "tenant_firstName", // Field to join on in the tenant collection
+//           as: "tenantData" // Alias for the joined data
+//         }
+//       },
+//       {
+//         $unwind: "$tenantData" // Unwind the tenantData array (as it's an array due to $lookup)
+//       }
+//     ]);
 
-    res.json({
-      data,
-      statusCode: 200,
-      message: "Read All Payments with Tenant Data",
-    });
-  } catch (error) {
-    console.error(error); // Log the error to the console for debugging
-    res.json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
-});
+//     res.json({
+//       data,
+//       statusCode: 200,
+//       message: "Read All Payments with Tenant Data",
+//     });
+//   } catch (error) {
+//     console.error(error); // Log the error to the console for debugging
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+
+// router.get("/payment/financial", async (req, res) => {
+//   try {
+//     const data = await Payment.aggregate([
+//       {
+//         $lookup: {
+//           from: "tenants",
+//           let: { firstName: "$tenant_firstName", address: "$rental_adress" },
+//           pipeline: [
+//             {
+//               $match: {
+//                 $expr: {
+//                   $and: [
+//                     { $eq: ["$tenant_firstName", "$$firstName"] },
+//                     { $eq: ["$rental_adress", "$$address"] }
+//                   ]
+//                 }
+//               }
+//             }
+//           ],
+//           as: "tenantData"
+//         }
+//       },
+//       {
+//         $unwind: "$tenantData"
+//       },
+//       {
+//         $match: { "tenantData": { $ne: [] } }
+//       }
+//     ]);
+
+//     res.json({
+//       data,
+//       statusCode: 200,
+//       message: "Read Payments with Matching Tenant Data",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+
+
+
+
 
 
 module.exports = router;

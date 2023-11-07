@@ -65,11 +65,11 @@ router.post("/addstaffmember", async (req, res) => {
   
       // Check if any work order is associated with the staff members to be deleted
       const assignedWorkOrders = await Workorder.find({
-        staffmember_name: { $in: staffMemberNamesToDelete },
+        staffmember_name : { $in: staffMemberNamesToDelete },
       });
 
       const assignedProperty = await Rentals.find({
-        staffmember_name: { $in: staffMemberNamesToDelete },
+        "entries.staffmember_name" : { $in: staffMemberNamesToDelete },
       });
   
       if (assignedWorkOrders.length > 0) {

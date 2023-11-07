@@ -124,84 +124,94 @@ router.get("/propropartytype", async (req, res) => {
 
 
 // delete proparty type working 
-router.delete("/newproparty", async (req, res) => {
-    try {
-      const propIdsToDelete = req.body;
-
-      console.log("propIdsToDelete from body", propIdsToDelete);
-  
-      // Get the names of the staff members to be deleted
-      const propertyToDelete = await NewProparty.find({
-        _id: { $in: propIdsToDelete },
-      }).select("propertysub_type");
-      console.log("propertyToDelete after variable",propertyToDelete)
-  
-      const propNamesToDelete = propertyToDelete.map(
-        (staff) => staff.propertysub_type
-      );
-  
-      const assignedProperty = await Rentals.find({
-        property_type: { $in: propNamesToDelete },
-      }); 
-  
-      if (assignedProperty.length > 0) {
-        return res.status(201).json({
-          statusCode: 201,
-          message:
-            "Property Type are already assigned. Deletion not allowed.",
-        });
-      }
-
-      const result = await NewProparty.deleteMany({
-        _id: { $in: propIdsToDelete },
-      });
-      
-      res.json({
-        statusCode: 200,
-        data: result,
-        message: "property Deleted Successfully",
-      });
-    } catch (err) {
-      console.log(err, "fsjlkdfjsdsfdljsldk")
-      res.json({
-        statusCode: 500,
-        message: err.message,
-      });
-    } 
-  });
-
-  
 // router.delete("/newproparty", async (req, res) => {
-//   try {
-//     // Check if property_type is already being used in the Rentals collection
-//     const propertyType = req.body.property_type; // Assuming property_type is in the request body
+//     try {
+//       const propIdsToDelete = req.body;
 
-//     const isPropertyTypeUsed = await Rentals.exists({ property_type: propertyType });
+//       console.log("propIdsToDelete from body", propIdsToDelete);
+  
+//       // Get the names of the staff members to be deleted
+//       const propertyToDelete = await NewProparty.find({
+//         _id: { $in: propIdsToDelete },
+//       }).select("propertysub_type");
+//       console.log("propertyToDelete after variable",propertyToDelete)
+  
+//       const propNamesToDelete = propertyToDelete.map(
+//         (staff) => staff.propertysub_type
+//       );
+  
+//       const assignedProperty = await Rentals.find({
+//         property_type: { $in: propNamesToDelete },
+//       }); 
+  
+//       if (assignedProperty.length > 0) {
+//         return res.status(201).json({
+//           statusCode: 201,
+//           message:
+//             "Property Type are already assigned. Deletion not allowed.",
+//         });
+//       }
 
-//     if (isPropertyTypeUsed) {
-//       res.json({
-//         statusCode: 400, // Use an appropriate status code (e.g., 400 for bad request)
-//         message: "Property type is already in use in Rentals collection",
+//       const result = await NewProparty.deleteMany({
+//         _id: { $in: propIdsToDelete },
 //       });
-//     } else {
-//       // If property_type is not in use, proceed with deletion
-//       let result = await NewProparty.deleteMany({
-//         _id: { $in: req.body.ids }, // Assuming you pass an array of IDs in req.body.ids
-//       });
-
+      
 //       res.json({
 //         statusCode: 200,
 //         data: result,
-//         message: "Property Deleted Successfully",
+//         message: "property Deleted Successfully",
 //       });
-//     }
-//   } catch (err) {
-//     res.json({
-//       statusCode: 500,
-//       message: err.message,
-//     });
-//   }
-// });
+//     } catch (err) {
+//       console.log(err, "fsjlkdfjsdsfdljsldk")
+//       res.json({
+//         statusCode: 500,
+//         message: err.message,
+//       });
+//     } 
+//   });
+
+router.delete("/newproparty", async (req, res) => {
+  try {
+    const propIdsToDelete = req.body;
+
+    // Get the property types to be deleted
+    const propertyToDelete = await NewProparty.find({
+      _id: { $in: propIdsToDelete },
+    }).select("propertysub_type");
+
+    const propNamesToDelete = propertyToDelete.map(
+      (property) => property.propertysub_type
+    );
+
+    const assignedProperty = await Rentals.find({
+      "entries.property_type": { $in: propNamesToDelete },
+    });
+
+    if (assignedProperty.length > 0) {
+      return res.status(201).json({
+        statusCode: 201,
+        message: "Property Type is already assigned. Deletion not allowed.",
+      });
+    }
+
+    const result = await NewProparty.deleteMany({
+      _id: { $in: propIdsToDelete },
+    });
+
+    res.json({
+      statusCode: 200,
+      data: result,
+      message: "Property Deleted Successfully",
+    });
+  } catch (err) {
+    console.log(err, "Error occurred");
+    res.json({
+      statusCode: 500,
+      message: err.message,
+    });
+  }
+});
+
 
 
   //edit proparty type Data

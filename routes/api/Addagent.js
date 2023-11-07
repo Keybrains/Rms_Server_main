@@ -56,21 +56,18 @@ router.delete("/delete_agent", async (req, res) => {
     try {
 
       const propIdsToDelete = req.body;
-
-      console.log("propIdsToDelete from body", propIdsToDelete);
   
       // Get the names of the staff members to be deleted
       const propertyToDelete = await Addagent.find({
         _id: { $in: propIdsToDelete },
       }).select("agent_name");
-      console.log("propertyToDelete after variable",propertyToDelete)
   
       const propNamesToDelete = propertyToDelete.map(
         (staff) => staff.agent_name
       );
   
       const assignedProperty = await Tenants.find({
-        leasing_agent: { $in: propNamesToDelete },
+        "entries.leasing_agent": { $in: propNamesToDelete },
       }); 
   
       if (assignedProperty.length > 0) {

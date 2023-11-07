@@ -151,26 +151,51 @@ router.delete("/rentals", async (req, res) => {
 
 
 // delete recored entry wise new updated 
-const fileData = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
-
+router.delete("/rental/:rentalId/entry/:entryIndex", async (req, res) => {
   try {
-    const response = await fetch('http://localhost:4000/api/uploadfile', {
-      method: 'POST',
-      body: formData,
-    });
+    const rentalId = req.params.rentalId;
+    const entryIndex = req.params.entryIndex; // Do not parse to int
 
-    if (response.ok) {
-      const data = await response.text(); // You may need to use text() instead of json() since the server is sending a text response.
-      console.log(data); // 'File uploaded successfully' or an error message
-    } else {
-      console.error('File upload failed');
+    const rentals = await Rentals.find();
+    const rental = rentals.find((t) => t._id.toString() === rentalId);
+
+    if (!rental || !rental.entries) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Rental not found or has no entries",
+      });
+      return;
     }
+
+    const entryIndexToDelete = rental.entries.findIndex(
+      (e) => e.entryIndex === entryIndex
+    );
+
+    if (entryIndexToDelete === -1) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Entry not found",
+      });
+      return;
+    }
+
+    // Remove the entry from the entries array
+    rental.entries.splice(entryIndexToDelete, 1);
+
+    // Save the updated tenant data
+    await rental.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Entry deleted successfully",
+    });
   } catch (error) {
-    console.error('Error uploading file:', error);
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
+    });
   }
-};
+});
 
  //edit rentals 
  router.put("/rentals/:id", async (req, res) => {

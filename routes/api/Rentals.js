@@ -497,23 +497,23 @@ router.get("/property_onrent", async (req, res) => {
   }
 }); 
 
-//find all rental_address
-// router.get("/allproperty", async (req, res) => {
-//   try {
-//     var data = await Rentals.find().select("rental_adress")
+// find all rental_address
+router.get("/rental_allproperty", async (req, res) => {
+  try {
+    var data = await Rentals.find().select("rental_adress")
     
-//     res.json({
-//       statusCode: 200,
-//       data: data,
-//       message: "read all property",
-//     });
-//   } catch (error) {
-//     res.json({
-//       statusCode: 500,
-//       message: error.message,
-//     });
-//   }
-// }); 
+    res.json({
+      statusCode: 200,
+      data: data,
+      message: "read all property",
+    });
+  } catch (error) {
+    res.json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+}); 
 
 router.get("/allproperty", async (req, res) => {
   try {

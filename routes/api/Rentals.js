@@ -154,17 +154,19 @@ router.delete("/rentals", async (req, res) => {
 router.delete("/rental/:rentalId/entry/:entryIndex", async (req, res) => {
   try {
     const rentalId = req.params.rentalId;
-    const entryIndex = req.params.entryIndex; // Do not parse to int
+    const entryIndex = req.params.entryIndex;
+
+    console.log("Received request to delete entry:", rentalId, entryIndex);
 
     const rentals = await Rentals.find();
     const rental = rentals.find((t) => t._id.toString() === rentalId);
 
+
     if (!rental || !rental.entries) {
-      res.status(404).json({
+      return res.status(404).json({
         statusCode: 404,
         message: "Rental not found or has no entries",
       });
-      return;
     }
 
     const entryIndexToDelete = rental.entries.findIndex(
@@ -179,10 +181,28 @@ router.delete("/rental/:rentalId/entry/:entryIndex", async (req, res) => {
       return;
     }
 
+    const propNamesToDelete = rental.entries[entryIndexToDelete].rental_adress;
+
+    console.log("propNamesToDelete:", propNamesToDelete)
+
+    const assignedProperty = await Tenants.find({
+      "entries.rental_adress": { $in: propNamesToDelete },
+    });
+    console.log(assignedProperty,"xyz")
+
+    console.log(assignedProperty.includes(propNamesToDelete), "abc")
+
+    if (assignedProperty.length > 0) {
+      return res.status(201).json({
+        statusCode: 201,
+        message: "Property Type is already assigned. Deletion not allowed.",
+      });
+    }
+
     // Remove the entry from the entries array
     rental.entries.splice(entryIndexToDelete, 1);
 
-    // Save the updated tenant data
+    // Save the updated rental data
     await rental.save();
 
     res.status(200).json({

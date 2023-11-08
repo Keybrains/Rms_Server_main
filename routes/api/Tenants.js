@@ -961,7 +961,7 @@ router.get("/tenant-detail/tenants/:rental_address", async (req, res) => {
 });
 
 
-// //get tenant name only rental address wise get data 
+// //get tenant name only rental address wise get data // working 
 // router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
 //   try {
 //     const rental_address = req.params.rental_address;
@@ -1000,6 +1000,50 @@ router.get("/tenant-detail/tenants/:rental_address", async (req, res) => {
 //   }
 // });
 
+
+
+// working this diffrent forment 
+// router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
+//   try {
+//     const rental_address = req.params.rental_address;
+//     console.log("Rental Address:", rental_address);
+
+//     const data = await Tenants.find({
+//       "entries.rental_adress": rental_address
+//     });
+
+//     if (!data || data.length === 0) {
+//       res.status(404).json({
+//         statusCode: 404,
+//         message: "Entries not found",
+//       });
+//       return;
+//     }
+
+//     const tenantData = data.map(entry => ({
+//       tenant_firstName: entry.tenant_firstName,
+//       tenant_lastName: entry.tenant_lastName,
+//     }));
+
+//     console.log("tenantData", tenantData);
+
+//     res.json({
+//       data: tenantData,
+//       statusCode: 200,
+//       message: "Tenant Name Details",
+//     });
+//   } catch (error) {
+//     // Handle errors properly
+//     console.error(error);
+//     res.status(500).json({
+//       statusCode: 500,
+//       message: "Internal server error",
+//     });
+//   }
+// });
+
+
+
 router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
   try {
     const rental_address = req.params.rental_address;
@@ -1017,9 +1061,12 @@ router.get("/tenant-name/tenant/:rental_address", async (req, res) => {
       return;
     }
 
+    // Extract the desired fields from the data
     const tenantData = data.map(entry => ({
       tenant_firstName: entry.tenant_firstName,
       tenant_lastName: entry.tenant_lastName,
+      _id: entry._id,
+      entryIndex: entry.entries[0].entryIndex // Assuming there's only one entry
     }));
 
     console.log("tenantData", tenantData);
@@ -1061,4 +1108,4 @@ router.get('/rental-address/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;  

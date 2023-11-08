@@ -27,6 +27,7 @@ router.post("/workorder", async (req, res) => {
       due_date,
       priority,
       upload_file,
+      final_total_amount,
       entries, // Array of parts and labor entries
     } = req.body;
 
@@ -50,6 +51,7 @@ router.post("/workorder", async (req, res) => {
       due_date,
       priority,
       upload_file,
+      final_total_amount,
       entries, // Store the array of entries
     });
 

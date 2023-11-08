@@ -187,6 +187,94 @@ router.get("/Payment_summary/:id", async (req, res) => {
 // });
 
 
+//rental adress wise data get in payment collection 
+// router.get("/payment/:rental_address", async (req, res) => {
+//   try {
+//     const rentalAddress = req.params.rental_address; // Get the rental address from the URL parameter
+
+//     var data = await Payment.find({ rental_adress: rentalAddress });
+
+//     if (data.length === 0) {
+//       console.log("No payment records found for the rental address: " + rentalAddress);
+//     }
+
+//     res.json({
+//       data: data,
+//       statusCode: 200,
+//       message: "Read Payments by Rental Address",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.json({
+//       statusCode: 500,
+//       message: error.message,
+//     });
+//   }
+// });
+
+router.get("/payment/:rental_address", async (req, res) => {
+  try {
+    const rentalAddress = req.params.rental_address;
+
+    const data = await Payment.aggregate([
+      {
+        $match: { rental_adress: rentalAddress }
+      },
+      {
+        $unwind: "$entries"
+      },
+      {
+        $lookup: {
+          from: "tenants",
+          let: { tenantId: { $toObjectId: "$tenant_id" }, entryIdx: "$entries.entryIndex" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$tenantId"] },
+                    { $eq: ["$entryIndex", "$$entryIdx"] }
+                  ]
+                }
+              }
+            }
+          ],
+          as: "TenantData"
+        }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          rental_adress: { $first: "$rental_adress" },
+          date: { $first: "$date" },
+          amount: { $first: "$amount" },
+          payment_method: { $first: "$payment_method" },
+          tenant_firstName: { $first: "$tenant_firstName" },
+          attachment: { $first: "$attachment" },
+          entries: { $push: "$entries" },
+          TenantData: { $first: "$TenantData" }
+        }
+      }
+    ]);
+
+    if (data.length === 0) {
+      console.log("No payment records found for the rental address: " + rentalAddress);
+    }
+
+    res.json({
+      data: data,
+      statusCode: 200,
+      message: "Read Payments by Rental Address",
+    });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      statusCode: 500,
+      message: error.message,
+    });
+  }
+});
+
 
 
 

@@ -1110,30 +1110,6 @@ router.get('/rental-address/:id', async (req, res) => {
 
 
 
-router.get("/Payment_summary/tenant/:tenantid/:entryindex", async (req, res) => {
-  try {
-    const tenantId = req.params.tenantid; 
-    const entryIndex = req.params.entryindex; 
-    var data = await Payment.find({ tenant_id : tenantId });
-    var data = await Payment.find({ entryIndex : entryIndex});
-    if (data && data.length > 0) {
-      res.json({
-        data: data,
-        statusCode: 200,
-        message: "summaryGet Successfully",
-      });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: "summary not found",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: error.message,
-    });
-  }
-});
+
 
 module.exports = router;  
